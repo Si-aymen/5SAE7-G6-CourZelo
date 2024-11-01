@@ -1,12 +1,4 @@
-pipeline {
-    agent any
-
-    tools {
-        maven 'M2_HOME' // Ensure that 'M2_HOME' matches the Maven installation name in Jenkins
-    }
-
-    stages {
-        stage('Checkout') {pipeline {
+ pipeline {
     agent any
 
     tools {
@@ -16,15 +8,22 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Correcting the Git URL and cloning from the 'aymen' branch
+                // Cloning the Git repository from the 'aymen' branch
                 git branch: 'aymen', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+            }
+        }
+
+        stage('Verify Directory Structure') {
+            steps {
+                // List directory structure to locate pom.xml
+                sh 'ls -R' // Recursive listing to see the full structure
             }
         }
 
         stage('Build') {
             steps {
-                // Navigating to the 'backendPidev' directory if the pom.xml is there
-                dir('backendPidev') { // Adjust this directory if necessary
+                // Adjust 'backendPidev' directory if needed based on directory structure
+                dir('backendPidev') { // Change this directory if needed
                     // Running the Maven build
                     sh 'mvn clean install'
                 }
@@ -33,44 +32,12 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('backendPidev') { // Adjust this directory if necessary
+                dir('backendPidev') { // Adjust if needed
                     // Running Maven tests
                     sh 'mvn test'
                 }
             }
         }
-    }
-
-    post {
-        success {
-            echo 'Build and tests succeeded!'
-        }
-        failure {
-            echo 'Build failed. Please check the logs.'
-        }
-    }
-}
-
-            steps {
-                // Cloning the Git repository from the master branch
-                git branch: 'aymen', url: 'https://github.com/Si-aymen/Courzello/new/aymen/backendPidev'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                // Running the Maven build
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Running Maven tests
-                sh 'mvn test'
-            }
-        }
-
     }
 
     post {
