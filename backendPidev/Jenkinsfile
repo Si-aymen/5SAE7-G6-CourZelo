@@ -9,7 +9,7 @@
         stage('Checkout') {
             steps {
                 // Cloning the Git repository from the 'aymen' branch
-                git branch: 'aymen', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+                git branch: 'yosra', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
             }
         }
 
