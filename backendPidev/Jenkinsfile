@@ -1,14 +1,14 @@
- pipeline {
+pipeline {
     agent any
 
     tools {
-        maven 'M2_HOME' // Ensure that 'M2_HOME' matches the Maven installation name in Jenkins
+        maven 'M2_HOME' // Ensure 'M2_HOME' matches the Maven installation name in Jenkins
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Cloning the Git repository from the 'aymen' branch
+                // Cloning the Git repository from the 'yosra' branch
                 git branch: 'yosra', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
             }
         }
@@ -22,9 +22,7 @@
 
         stage('Build') {
             steps {
-                // Adjust 'backendPidev' directory if needed based on directory structure
-                dir('backendPidev') { // Change this directory if needed
-                    // Running the Maven build
+                dir('backendPidev') { // Adjust if needed based on directory structure
                     sh 'mvn clean install'
                 }
             }
@@ -33,13 +31,12 @@
         stage('Test') {
             steps {
                 dir('backendPidev') { // Adjust if needed
-                    // Running Maven tests
                     sh 'mvn test'
                 }
             }
         }
-    }
-   stage('SonarQube Analysis') {
+      
+        stage('SonarQube Analysis') {
             steps {
                 dir('backendPidev') {
                     script {
@@ -57,6 +54,8 @@
                 }
             }
         }
+    }
+
     post {
         success {
             echo 'Build and tests succeeded!'
