@@ -13,12 +13,7 @@ pipeline {
             }
         }
 
-        stage('Verify Directory Structure') {
-            steps {
-                // List directory structure to locate pom.xml
-                sh 'ls -R' // Recursive listing to see the full structure
-            }
-        }
+        
 
         stage('Build') {
             steps {
