@@ -34,7 +34,9 @@ pipeline {
      
         stage ('Nexus'){
             steps {
+                dir('backendPidev') {
                 sh 'mvn deploy '
+                }
             }
         }   
     }
