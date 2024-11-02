@@ -17,13 +17,15 @@ pipeline {
             steps {
                 // Exécution de la construction Maven
                 sh 'mvn -f backendPidev/pom.xml clean install'
+
             }
         }
 
         stage('Test') {
             steps {
                 // Exécution des tests Maven
-                sh 'mvn test -X'
+                sh 'mvn -f backendPidev/pom.xml clean install'
+
             }
         }
     }
