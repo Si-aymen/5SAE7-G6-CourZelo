@@ -50,10 +50,20 @@ environment {
     
     post {
         success {
-            echo 'La construction et les tests ont réussi !'
+             emailext(
+                to: 'destinataire@example.comdvd',
+                subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Le build a réussi !",
+                attachLog: true
+            )
         }
         failure {
-            echo 'La construction a échoué. Veuillez vérifier les journaux.'
+            emailext(
+                to: 'destinataire@example.com',
+                subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Le build a échoué. Consultez les logs pour plus de détails.",
+                attachLog: true
+            )
         }
     }
 }
