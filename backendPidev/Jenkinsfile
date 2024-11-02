@@ -16,7 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Exécution de la construction Maven
-                sh 'mvn clean install'
+                sh 'mvn -f backendPidev/pom.xml clean install'
             }
         }
 
