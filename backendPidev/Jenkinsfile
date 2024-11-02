@@ -5,11 +5,6 @@ pipeline {
         maven 'M2_HOME' // Assure-toi que 'M2_HOME' correspond au nom de l'installation Maven dans Jenkins
     }
 
-    environment {
-        // Variables nécessaires pour SonarQube
-        SONARQUBE_SERVER = 'http://192.168.33.10:9000' // URL de SonarQube
-        SONARQUBE_AUTH_TOKEN = credentials('sonarqube-auth-token') // Assure-toi que 'sonarqube-auth-token' correspond au jeton sauvegardé dans Jenkins
-    }
 
     stages {
         stage('Checkout') {
@@ -37,12 +32,8 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // Analyse SonarQube
-                sh """
-                mvn -f backendPidev/pom.xml sonar:sonar \
-                    -Dsonar.host.url=${SONARQUBE_SERVER} \
-                    -Dsonar.login=${SONARQUBE_AUTH_TOKEN}
-                """
+                // Exécution de l'analyse sans authentification
+                sh "mvn sonar:sonar -Dsonar.host.url=http://192.168.33.10:9000"
             }
         }
     }
