@@ -51,7 +51,7 @@ environment {
     post {
         success {
              emailext(
-                to: 'destinataire@example.comdvd',
+                to: 'nourchaine.sahli@gmail.com',
                 subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "Le build a réussi !",
                 attachLog: true
@@ -59,7 +59,7 @@ environment {
         }
         failure {
             emailext(
-                to: 'destinataire@example.com',
+                to: 'nourchaine.sahli@gmail.com',
                 subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "Le build a échoué. Consultez les logs pour plus de détails.",
                 attachLog: true
