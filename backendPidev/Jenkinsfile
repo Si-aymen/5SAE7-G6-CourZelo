@@ -29,7 +29,7 @@ pipeline {
                            sh 'mvn test'
                        }
                        // Archive test results for JUnit
-                       junit '**/target/surefire-reports/*.xml'
+                       junit 'backendPidev/target/surefire-reports/*.xml'
                    }
                }
 
