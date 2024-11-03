@@ -37,7 +37,8 @@ pipeline {
                   steps {
                       script {
                           echo 'Building Docker Image'
-                          def dockerImage = docker.build("yosra2001/devops:0.0.1", "-f backendPidev/Jenkinsfile .") // Specify Dockerfile path if needed
+                          // Make sure to specify the correct Dockerfile path
+                          sh 'docker build -t yosra2001/devops:0.0.1 -f backendPidev/Dockerfile backendPidev'
                       }
                   }
               }
