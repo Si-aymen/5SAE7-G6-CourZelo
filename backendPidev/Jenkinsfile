@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                cleanWs()
+                //cleanWs()
                 retry(3) { // Retry up to 3 times in case of failure
                     checkout([$class: 'GitSCM',
                               branches: [[name: '*/aymen']],
