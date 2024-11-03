@@ -32,26 +32,7 @@ pipeline {
                    }
                }
 
-      stage('Build Docker Image') {
-                  steps {
-                      script {
-                          // Adjust the image name and tag as needed
-                          def imageName = 'devops/projet:latest'
-                          sh "docker build -t ${imageName} backendPidev" // Path to the Dockerfile
-                      }
-                  }
-              }
-
-              stage('Push Docker Image') {
-                  steps {
-                      script {
-                          // Login to Docker registry if required
-                          sh 'docker login -u yosra2001 -p machine*learning'
-                          // Push the Docker image
-                          sh 'docker push devops/projet:latest'
-                      }
-                  }
-              }
+      
       stage('SonarQube Analysis') {
             steps {
                 dir('backendPidev') {
