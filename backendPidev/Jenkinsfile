@@ -1,15 +1,18 @@
 pipeline {
-     agent {
+    agent {
         docker { 
             image 'node:16-alpine' 
         }
+    }
 
-   //     tools {
-   //     maven 'M2_HOME' // Assure-toi que 'M2_HOME' correspond au nom de l'installation Maven dans Jenkins
-  //  }
-//environment {
-   //     SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube 
-   // }
+    // Décommenter si nécessaire
+    // tools {
+    //     maven 'M2_HOME' // Assure-toi que 'M2_HOME' correspond au nom de l'installation Maven dans Jenkins
+    // }
+
+    // environment {
+    //     SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube
+    // }
 
     stages {
         stage('Checkout') {
@@ -23,51 +26,53 @@ pipeline {
             steps {
                 // Exécution de la construction Maven
                 sh 'mvn -f backendPidev/pom.xml clean install'
-
             }
         }
 
         stage('Test') {
             steps {
                 // Exécution des tests Maven
-                sh 'mvn -f backendPidev/pom.xml clean install'
-
+                sh 'mvn -f backendPidev/pom.xml clean test'
             }
         }
 
-   /*    stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
-                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
-                }
-            }
-        }
-        
-         stage('Deploy to Nexus') {
-            steps {
-                // Déploiement vers Nexus, en ignorant les tests
-                sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
-            }
-        } */
+        // Décommenter si nécessaire
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv('admin') { // serveur SonarQube configuré dans Jenkins
+        //             sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
+        //         }
+        //     }
+        // }
+
+        // stage('Deploy to Nexus') {
+        //     steps {
+        //         // Déploiement vers Nexus, en ignorant les tests
+        //         sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
+        //     }
+        // }
     }
     
     post {
         success {
-           /*  emailext(
-                to: 'nourchaine.sahli@gmail.com',
-                subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Le build a réussi !",
-                attachLog: true
-            )*/
+            // Décommenter si nécessaire
+            // emailext(
+            //     to: 'nourchaine.sahli@gmail.com',
+            //     subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            //     body: "Le build a réussi !",
+            //     attachLog: true
+            // )
+             echo "Pipeline completed successfully."
         }
         failure {
-         /*   emailext(
-                to: 'nourchaine.sahli@gmail.com',
-                subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Le build a échoué. Consultez les logs pour plus de détails.",
-                attachLog: true
-            ) */ 
+            // Décommenter si nécessaire
+            // emailext(
+            //     to: 'nourchaine.sahli@gmail.com',
+            //     subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            //     body: "Le build a échoué. Consultez les logs pour plus de détails.",
+            //     attachLog: true
+            // )
+             echo "Pipeline failed."
         }
     }
-}
 }
