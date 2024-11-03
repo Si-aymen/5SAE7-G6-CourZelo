@@ -2,44 +2,180 @@ pipeline {
     agent any
 
     tools {
-        maven 'M2_HOME' // Ensure that 'M2_HOME' matches the Maven installation name in Jenkins
+        maven 'M2_HOME'
+    }
+
+    environment {
+        BASE_DIR = 'backendPidev'
+        EMAIL_RECIPIENT = 'aymen.rahali@esprit.tn'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Cloning the Git repository from the master branch
-                git branch: 'aymen', url: 'https://github.com/Si-aymen/Courzello/new/aymen/backendPidev'
+                cleanWs()
+                retry(3) { // Retry up to 3 times in case of failure
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: '*/aymen']],
+                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
+                              extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
+                    ])
+                }
             }
         }
 
-        stage('Build') {
+        stage('Clean-Compile') {
             steps {
-                // Running the Maven build
-                sh 'mvn clean install'
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn clean compile'
+                        } catch (Exception e) {
+                            error("Clean-Compile stage failed: ${e.message}")
+                        }
+                    }
+                }
             }
         }
 
-        stage('Test') {
+        stage('Test-Compile') {
             steps {
-                // Running Maven tests
-                sh 'mvn test'
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn test-compile'
+                        } catch (Exception e) {
+                            error("Test-Compile stage failed: ${e.message}")
+                        }
+                    }
+                }
             }
         }
 
- stage ('Nexus'){
-     steps {
-         sh 'mvn deploy';
-     }
- }
+        stage('JUnit Tests') {
+            steps {
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn test'
+                        } catch (Exception e) {
+                            error("JUnit Tests stage failed: ${e.message}")
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml' // Path for JUnit test reports
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn package -DskipTests'
+                        } catch (Exception e) {
+                            error("Package stage failed: ${e.message}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn install -DskipTests'
+                        } catch (Exception e) {
+                            error("Install stage failed: ${e.message}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Generate JaCoCo Report') {
+            steps {
+                echo 'Generating JaCoCo Report'
+                dir("$BASE_DIR") {
+                    script {
+                        try {
+                            sh 'mvn jacoco:report'
+                        } catch (Exception e) {
+                            error("JaCoCo Report generation failed: ${e.message}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('JaCoCo Coverage Report') {
+            steps {
+                echo 'Publishing JaCoCo Coverage Report'
+                step([$class: 'JacocoPublisher',
+                      execPattern: '**/target/jacoco.exec',
+                      classPattern: '**/target/classes/**/*.class',
+                      sourcePattern: '**/src/main/java/**/*.java',
+                      exclusionPattern: '**/target/**,**/*Test*,**/_javassist/**'
+                ])
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir("$BASE_DIR") {
+                    withCredentials([string(credentialsId: 'SONARQUBE_TOKEN_ID', variable: 'SONAR_TOKEN')]) {
+                        script {
+                            withSonarQubeEnv('sonar courZelo') {
+                                try {
+                                    sh """
+                                        mvn sonar:sonar \
+                                          -Dsonar.projectKey=courZelo \
+                                          -Dsonar.projectName="sonar courZelo" \
+                                          -Dsonar.host.url=http://192.168.33.10:9006 \
+                                          -Dsonar.token=$SONAR_TOKEN
+                                    """
+                                } catch (Exception e) {
+                                    error("SonarQube Analysis failed: ${e.message}")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*stage ('Nexus') {
+            steps {
+                dir("$BASE_DIR") {
+                    sh 'mvn deploy'
+                }
+            }
+        }*/
     }
 
     post {
         success {
-            echo 'Build and tests succeeded!'
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has completed successfully.
+                 Build number: ${BUILD_NUMBER}. No action required."""
         }
         failure {
-            echo 'Build failed. Please check the logs.'
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                 Please check the logs and take necessary actions."""
+        }
+        always {
+            echo 'Pipeline completed.'
         }
     }
 }

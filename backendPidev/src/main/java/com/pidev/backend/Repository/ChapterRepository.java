@@ -1,18 +1,10 @@
-package com.pidev.backend.Repository;
+package com.pidev.backend.repository;
 
 
-import com.pidev.backend.Entity.Chapter;
-import com.pidev.backend.Entity.Classroom;
-import com.pidev.backend.Entity.Role;
-
-import com.pidev.backend.Entity.Speciality;
+import com.pidev.backend.entity.Chapter;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-
-
-import java.util.List;
-import java.util.Set;
 
 
 @Repository

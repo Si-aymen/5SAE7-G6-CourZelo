@@ -1,9 +1,9 @@
-package com.pidev.backend.Controller;
+package com.pidev.backend.controller;
 
-import com.pidev.backend.Entity.Role;
-import com.pidev.backend.Entity.User;
-import com.pidev.backend.Repository.UserRepository;
-import com.pidev.backend.Service.UserService;
+import com.pidev.backend.entity.Role;
+import com.pidev.backend.entity.User;
+import com.pidev.backend.repository.UserRepository;
+import com.pidev.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
 @RequestMapping("/users")
 public class UserController {
 
@@ -115,7 +115,6 @@ public class UserController {
     public void followUser(@PathVariable String id) {
         User user = userService.getUserById(id);
         User connectedUser = userRepository.getUserById(User.CONNECTEDUSER.getId());
-        System.out.println(connectedUser.getFollowing().contains(user));
         if (!connectedUser.getFollowing().contains(user)) {
             if (User.CONNECTEDUSER.getFollowing().isEmpty()) {
                 List<User> users = new ArrayList<User>();

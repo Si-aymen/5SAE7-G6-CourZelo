@@ -1,11 +1,11 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.*;
-import com.pidev.backend.Repository.HashtagRepository;
-import com.pidev.backend.Repository.QuestionRepository;
-import com.pidev.backend.Repository.SignaBAdWordRepository;
-import com.pidev.backend.Repository.UserRepository;
-import com.pidev.backend.Service.IQuestionService;
+import com.pidev.backend.entity.*;
+import com.pidev.backend.repository.HashtagRepository;
+import com.pidev.backend.repository.QuestionRepository;
+import com.pidev.backend.repository.SignaBAdWordRepository;
+import com.pidev.backend.repository.UserRepository;
+import com.pidev.backend.service.IQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

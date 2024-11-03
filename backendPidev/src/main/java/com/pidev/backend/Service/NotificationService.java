@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Notification;
+import com.pidev.backend.entity.Notification;
 
 public interface NotificationService {
     void sendNotification(String userId, Notification notification);

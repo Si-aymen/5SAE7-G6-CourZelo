@@ -1,4 +1,4 @@
-package com.pidev.backend.Entity;
+package com.pidev.backend.entity;
 
 public enum Technologie {
     HTML, CSS, JavaScript, ReactJS, Angular, VueJS, Bootstrap,

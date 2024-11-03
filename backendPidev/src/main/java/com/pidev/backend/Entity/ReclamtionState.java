@@ -1,4 +1,4 @@
-package com.pidev.backend.Entity;
+package com.pidev.backend.entity;
 
 public enum ReclamtionState {
     EN_ATTENTE, EN_COURS, RESOLUE, REJETEE

@@ -1,7 +1,7 @@
-package com.pidev.backend.Controller;
+package com.pidev.backend.controller;
 
-import com.pidev.backend.Entity.Attachment;
-import com.pidev.backend.Entity.Reclamation;
+import com.pidev.backend.entity.Attachment;
+import com.pidev.backend.entity.Reclamation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,7 +1,7 @@
-package com.pidev.backend.Repository;
+package com.pidev.backend.repository;
 
-import com.pidev.backend.Entity.Classroom;
-import com.pidev.backend.Entity.User;
+import com.pidev.backend.entity.Classroom;
+import com.pidev.backend.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,6 @@ import java.util.List;
 public interface ClassroomRepository extends MongoRepository<Classroom, String> {
     Classroom getClassroomByClassroomName(String lvl );
     Classroom getClassroomById(String id) ;
-
     List<Classroom> getClassroomByTeachersContains(User teacher);
     List<Classroom> getClassroomByStudnetsContains(User student);
 

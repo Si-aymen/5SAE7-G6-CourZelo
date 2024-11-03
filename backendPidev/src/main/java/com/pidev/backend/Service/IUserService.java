@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.User;
+import com.pidev.backend.entity.User;
 
 public interface IUserService {
     public User ajoutuser(User u);

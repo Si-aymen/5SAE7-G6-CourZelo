@@ -1,8 +1,7 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Course;
-import com.pidev.backend.Entity.Speciality;
-import com.pidev.backend.Entity.User;
+import com.pidev.backend.entity.Course;
+import com.pidev.backend.entity.Speciality;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

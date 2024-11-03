@@ -1,14 +1,13 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.Classroom;
-import com.pidev.backend.Entity.Role;
-import com.pidev.backend.Repository.ClassroomRepository;
-import com.pidev.backend.Service.UserService;
+import com.pidev.backend.entity.Classroom;
+import com.pidev.backend.entity.Role;
+import com.pidev.backend.repository.ClassroomRepository;
+import com.pidev.backend.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pidev.backend.Entity.User;
-import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.entity.User;
+import com.pidev.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Department;
+import com.pidev.backend.entity.Department;
 import java.util.List;
 
 public interface DepartmentService {

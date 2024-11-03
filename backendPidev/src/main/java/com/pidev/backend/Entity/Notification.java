@@ -1,4 +1,4 @@
-package com.pidev.backend.Entity;
+package com.pidev.backend.entity;
 
 public class Notification {
     private String message;

@@ -1,23 +1,21 @@
-package com.pidev.backend.Controller;
+package com.pidev.backend.controller;
 
-import com.pidev.backend.Entity.Glossary;
-import com.pidev.backend.Service.GlossaryService;
+import com.pidev.backend.entity.Glossary;
+import com.pidev.backend.service.GlossaryService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/glossary")
 public class GlossaryController {
-    @Autowired
-    private GlossaryService glossaryService;
+    private final  GlossaryService glossaryService;
 
     @GetMapping("/get_all")
     public List<Glossary> getAllTermes() {
@@ -38,8 +36,5 @@ public class GlossaryController {
         glossaryService.deleteGlossary(id);
         return ResponseEntity.ok().build();
     }
-   /* @GetMapping("/recherche-temps-reel")
-    public Flux<Glossary> rechercheEnTempsReel(@RequestParam(name = "term") String term) {
-        return glossaryService.rechercheEnTempsReel(term);
-    }*/
+
 }

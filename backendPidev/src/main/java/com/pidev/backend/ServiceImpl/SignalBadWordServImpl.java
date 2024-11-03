@@ -1,8 +1,8 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.SignalBadword;
-import com.pidev.backend.Repository.SignaBAdWordRepository;
-import com.pidev.backend.Service.ISignalBadWordService;
+import com.pidev.backend.entity.SignalBadword;
+import com.pidev.backend.repository.SignaBAdWordRepository;
+import com.pidev.backend.service.ISignalBadWordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

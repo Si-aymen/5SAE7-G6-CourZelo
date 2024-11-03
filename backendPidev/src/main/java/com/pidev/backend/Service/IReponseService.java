@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Reponse;
+import com.pidev.backend.entity.Reponse;
 
 import java.util.List;
 

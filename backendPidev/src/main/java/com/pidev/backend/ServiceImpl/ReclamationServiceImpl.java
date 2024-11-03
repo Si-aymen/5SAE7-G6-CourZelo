@@ -1,10 +1,10 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.Attachment;
-import com.pidev.backend.Entity.Reclamation;
-import com.pidev.backend.Entity.ReclamtionState;
-import com.pidev.backend.Repository.ReclamationRepository;
-import com.pidev.backend.Service.ReclamationService;
+import com.pidev.backend.entity.Attachment;
+import com.pidev.backend.entity.Reclamation;
+import com.pidev.backend.entity.ReclamtionState;
+import com.pidev.backend.repository.ReclamationRepository;
+import com.pidev.backend.service.ReclamationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

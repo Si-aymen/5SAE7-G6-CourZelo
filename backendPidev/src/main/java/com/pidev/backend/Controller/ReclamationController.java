@@ -1,13 +1,11 @@
-package com.pidev.backend.Controller;
+package com.pidev.backend.controller;
 
-import com.pidev.backend.Entity.Attachment;
-import com.pidev.backend.Entity.Notification;
-import com.pidev.backend.Entity.Reclamation;
-import com.pidev.backend.Entity.User;
-import com.pidev.backend.Service.AttachementService;
-import com.pidev.backend.Service.NotificationService;
-import com.pidev.backend.Service.ReclamationService;
-import com.pidev.backend.Service.UserService;
+import com.pidev.backend.entity.*;
+
+import com.pidev.backend.service.AttachementService;
+import com.pidev.backend.service.NotificationService;
+import com.pidev.backend.service.ReclamationService;
+import com.pidev.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
 
 
 
@@ -27,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/reclamations")
 public class ReclamationController {
     private ReclamationService reclamationService;
-    private AttachementService attachment_service;
+    private AttachementService attachementService;
     private UserService userService;
     private NotificationService notificationService;
 
@@ -54,7 +52,7 @@ public class ReclamationController {
         // Assurez-vous que l'objet Attachment est présent avant de l'associer à la réclamation
         if (att != null) {
             att.setReclamation(rec);
-            att = attachment_service.createAttachement(att);
+            att = attachementService.createAttachement(att);
             rec.setAttachment(att);
         }
 
@@ -98,7 +96,7 @@ public class ReclamationController {
 
                 // Delete the Attachment if it exists
                 if (attachment != null) {
-                    attachment_service.deleteAttachement(attachment.getId());
+                    attachementService.deleteAttachement(attachment.getId());
                 }
 
                 // Delete the Reclamation

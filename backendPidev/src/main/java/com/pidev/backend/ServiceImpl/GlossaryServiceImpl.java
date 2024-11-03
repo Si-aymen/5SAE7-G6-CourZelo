@@ -1,9 +1,9 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
 
-import com.pidev.backend.Entity.Glossary;
-import com.pidev.backend.Repository.GlossaryRepository;
-import com.pidev.backend.Service.GlossaryService;
+import com.pidev.backend.entity.Glossary;
+import com.pidev.backend.repository.GlossaryRepository;
+import com.pidev.backend.service.GlossaryService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

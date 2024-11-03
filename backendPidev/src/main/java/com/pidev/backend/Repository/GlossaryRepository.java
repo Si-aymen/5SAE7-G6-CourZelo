@@ -1,6 +1,6 @@
-package com.pidev.backend.Repository;
+package com.pidev.backend.repository;
 
-import com.pidev.backend.Entity.Glossary;
+import com.pidev.backend.entity.Glossary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 @Repository

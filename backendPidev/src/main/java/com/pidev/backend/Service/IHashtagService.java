@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Hashtag;
+import com.pidev.backend.entity.Hashtag;
 
 import java.util.List;
 

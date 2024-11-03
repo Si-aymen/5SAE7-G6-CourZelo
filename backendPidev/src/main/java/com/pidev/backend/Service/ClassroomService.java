@@ -1,8 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Classroom;
-import com.pidev.backend.Entity.Course;
-import com.pidev.backend.Entity.User;
+import com.pidev.backend.entity.Classroom;
 
 import java.util.List;
 

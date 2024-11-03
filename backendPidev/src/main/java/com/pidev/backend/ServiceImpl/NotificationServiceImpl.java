@@ -1,7 +1,7 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.Notification;
-import com.pidev.backend.Service.NotificationService;
+import com.pidev.backend.entity.Notification;
+import com.pidev.backend.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.pidev.backend.Service;
+package com.pidev.backend.service;
 
-import com.pidev.backend.Entity.Vote;
+import com.pidev.backend.entity.Vote;
 
 public interface IVoteService {
     public Vote ajoutdeletevote(Vote v, String idu , String idq);

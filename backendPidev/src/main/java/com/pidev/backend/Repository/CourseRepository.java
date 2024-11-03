@@ -1,7 +1,7 @@
-package com.pidev.backend.Repository;
+package com.pidev.backend.repository;
 
-import com.pidev.backend.Entity.Course;
-import com.pidev.backend.Entity.Speciality;
+import com.pidev.backend.entity.Course;
+import com.pidev.backend.entity.Speciality;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

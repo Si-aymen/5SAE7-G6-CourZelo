@@ -1,10 +1,10 @@
-package com.pidev.backend.ServiceImpl;
+package com.pidev.backend.serviceImpl;
 
-import com.pidev.backend.Entity.*;
-import com.pidev.backend.Repository.ChapterRepository;
-import com.pidev.backend.Repository.CourseRepository;
-import com.pidev.backend.Repository.UserRepository;
-import com.pidev.backend.Service.CourseService;
+import com.pidev.backend.entity.*;
+import com.pidev.backend.repository.ChapterRepository;
+import com.pidev.backend.repository.CourseRepository;
+import com.pidev.backend.repository.UserRepository;
+import com.pidev.backend.service.CourseService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.pidev.backend.Entity;
+package com.pidev.backend.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;

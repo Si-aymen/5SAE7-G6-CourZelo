@@ -1,22 +1,19 @@
-package com.pidev.backend.Controller;
+package com.pidev.backend.controller;
 
-import com.pidev.backend.Entity.Conversation;
-import com.pidev.backend.Entity.Chapter;
-import com.pidev.backend.Entity.Course;
-import com.pidev.backend.Service.ChapterService;
+import com.pidev.backend.entity.Chapter;
+import com.pidev.backend.service.ChapterService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*", exposedHeaders = "Access-Control-Allow-Origin")
+@CrossOrigin(origins = "http://localhost:4200", exposedHeaders = "Access-Control-Allow-Origin")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/chapters")
 public class ChapterController {
-    @Autowired
-    ChapterService chapterService;
+    private final ChapterService chapterService;
+
 
     @PostMapping("/add-chapter")
     public Chapter addChapter(@RequestBody Chapter c) {
