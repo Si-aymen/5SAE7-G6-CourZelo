@@ -6,12 +6,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Cloning the Git repository from the 'yosra' branch
-                git branch: 'yosra', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
-            }
-        }
+      stage('Checkout') {
+          steps {
+              checkout([$class: 'GitSCM', branches: [[name: '*/yosra']], userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']], shallow: true])
+          }
+      }
 
         
 
