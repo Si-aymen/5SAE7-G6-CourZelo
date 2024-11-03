@@ -133,13 +133,13 @@ pipeline {
                         script {
                             withSonarQubeEnv('sonar courZelo') {
                                 try {
-                                    sh """
-                                        mvn sonar:sonar \
-                                          -Dsonar.projectKey=courZelo \
-                                          -Dsonar.projectName="sonar courZelo" \
-                                          -Dsonar.host.url=http://192.168.33.10:9006 \
-                                          -Dsonar.token=sqp_8037d660cceccd9d73d9bf8db0517d7ad99c016b
-                                    """
+                                        sh '''
+                                         mvn sonar:sonar \
+                                         -Dsonar.projectKey=courZelo \
+                                         -Dsonar.projectName="sonar courZelo" \
+                                         -Dsonar.host.url=http://192.168.33.10:9006 \
+                                         -Dsonar.token=sqp_8037d660cceccd9d73d9bf8db0517d7ad99c016b
+                            '''
                                 } catch (Exception e) {
                                     error("SonarQube Analysis failed: ${e.message}")
                                 }
