@@ -37,7 +37,7 @@ pipeline {
                   steps {
                       script {
                           echo 'Building Docker Image'
-                          def dockerImage = docker.build("yosra2001/devops:0.0.1", "-f backendPidev/Jockerfile .") // Specify Dockerfile path if needed
+                          def dockerImage = docker.build("yosra2001/devops:0.0.1", "-f backendPidev/Jenkinsfile .") // Specify Dockerfile path if needed
                       }
                   }
               }
