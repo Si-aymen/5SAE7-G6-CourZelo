@@ -135,10 +135,10 @@ pipeline {
                                 try {
                                         sh '''
                                          mvn sonar:sonar \
-                                         -Dsonar.projectKey=courZelo \
-                                         -Dsonar.projectName="sonar courZelo" \
+                                         -Dsonar.projectKey=NewcourZelo \
+                                         -Dsonar.projectName=NewcourZelo \
                                          -Dsonar.host.url=http://192.168.33.10:9006 \
-                                         -Dsonar.token=sqp_8037d660cceccd9d73d9bf8db0517d7ad99c016b
+                                         -Dsonar.token=sqp_691fa05196ef4835c6de1f2759810955b1e7f25a
                             '''
                                 } catch (Exception e) {
                                     error("SonarQube Analysis failed: ${e.message}")
