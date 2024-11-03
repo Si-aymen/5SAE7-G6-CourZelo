@@ -24,12 +24,15 @@ pipeline {
         }
       
         stage('Test') {
-            steps {
-                dir('backendPidev') { // Adjust if needed
-                    sh 'mvn test'
-                }
-            }
-        }
+                   steps {
+                       dir('backendPidev') { // Adjust if needed
+                           sh 'mvn test'
+                       }
+                       // Archive test results for JUnit
+                       junit '**/target/surefire-reports/*.xml'
+                   }
+               }
+
       
       stage('SonarQube Analysis') {
             steps {
