@@ -1,21 +1,21 @@
 package com.pidev.backend.Entity;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach; // Change to JUnit 5 import
+import org.junit.jupiter.api.Test; // Change to JUnit 5 import
+import org.junit.jupiter.api.extension.ExtendWith; // Import for extension
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension; // JUnit 5 Mockito extension
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals; // JUnit 5 assertions
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
-@RunWith(MockitoJUnitRunner.class)
 
+@ExtendWith(MockitoExtension.class) // Use Mockito extension
 public class DepartmentTest {
 
     @InjectMocks
@@ -24,34 +24,34 @@ public class DepartmentTest {
     @Mock
     private List<User> teachers;
 
-    @Before
+    @BeforeEach // Updated to JUnit 5 equivalent
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        department = new Department();
+        // No need to instantiate department again
     }
 
-    @Test
+    @Test // Remains the same
     public void testSetAndGetDepartmentId() {
         String departmentId = "dept001";
         department.setDepartmentId(departmentId);
         assertEquals("dept001", department.getDepartmentId());
     }
 
-    @Test
+    @Test // Remains the same
     public void testSetAndGetName() {
         String name = "Mathematics";
         department.setName(name);
         assertEquals("Mathematics", department.getName());
     }
 
-    @Test
+    @Test // Remains the same
     public void testSetAndGetContactInformation() {
         String contactInfo = "contact@university.edu";
         department.setContactInformation(contactInfo);
         assertEquals("contact@university.edu", department.getContactInformation());
     }
 
-    @Test
+    @Test // Remains the same
     public void testSetAndGetTeachers() {
         List<User> mockTeachers = new ArrayList<>();
         mockTeachers.add(mock(User.class));
