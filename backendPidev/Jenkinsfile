@@ -32,7 +32,25 @@ pipeline {
                    }
                }
 
-      
+
+              stage('Build Docker Image') {
+                          steps {
+                              script {
+                                  echo 'Building Docker Image'
+                                  def dockerImage = docker.build("yosra2001/devops:0.0.1")
+                              }
+                          }
+                      }
+
+                      stage('Deploy Image to DockerHub') {
+                          steps {
+                              script {
+                                  echo 'Logging into DockerHub and Pushing Image'
+                                  sh 'docker login -u yosra2001 -p machine*learning'
+                                  sh 'docker push yosra2001/devops:0.0.1'
+                              }
+                          }
+                      }
       stage('SonarQube Analysis') {
             steps {
                 dir('backendPidev') {
