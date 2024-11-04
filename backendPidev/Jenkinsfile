@@ -106,15 +106,14 @@ pipeline {
         }
 
 
-                      stage('Build Docker Image') {
-                  steps {
-                      script {
-                          echo 'Building Docker Image'
-                          // Make sure to specify the correct Dockerfile path
-                          sh ' docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
-                      }
-                  }
-              }
+stage('Build Docker Image') {
+    steps {
+        script {
+            echo 'Building Docker Image'
+            sh 'docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
+        }
+    }
+}
 
 
                       stage('Deploy Image to DockerHub') {
