@@ -13,21 +13,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                //cleanWs()
                 retry(3) { // Retry up to 3 times in case of failure
                     checkout([$class: 'GitSCM',
                               branches: [[name: '*/aymen']],
-@@ -27,41 +26,23 @@
+                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
+                              extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
+                    ])
+                }
+            }
+        }
+
         stage('Clean-Compile') {
             steps {
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn clean compile'
-                        } catch (Exception e) {
-                            error("Clean-Compile stage failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn clean compile'
                 }
             }
@@ -36,13 +34,6 @@ pipeline {
         stage('Test-Compile') {
             steps {
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn test-compile'
-                        } catch (Exception e) {
-                            error("Test-Compile stage failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn test-compile'
                 }
             }
@@ -51,28 +42,19 @@ pipeline {
         stage('JUnit Tests') {
             steps {
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn test'
-                        } catch (Exception e) {
-                            error("JUnit Tests stage failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn test'
                 }
             }
             post {
-@@ -74,27 +55,15 @@
+                always {
+                    junit '**/target/surefire-reports/*.xml' // Path for JUnit test reports
+                }
+            }
+        }
+
         stage('Package') {
             steps {
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn package -DskipTests'
-                        } catch (Exception e) {
-                            error("Package stage failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn package -DskipTests'
                 }
             }
@@ -81,52 +63,35 @@ pipeline {
         stage('Install') {
             steps {
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn install -DskipTests'
-                        } catch (Exception e) {
-                            error("Install stage failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn install -DskipTests'
                 }
             }
         }
-@@ -103,13 +72,7 @@
+
+        stage('Generate JaCoCo Report') {
             steps {
                 echo 'Generating JaCoCo Report'
                 dir("$BASE_DIR") {
-                    script {
-                        try {
-                            sh 'mvn jacoco:report'
-                        } catch (Exception e) {
-                            error("JaCoCo Report generation failed: ${e.message}")
-                        }
-                    }
                     sh 'mvn jacoco:report'
                 }
             }
         }
-@@ -129,53 +92,45 @@
+
+        stage('JaCoCo Coverage Report') {
+            steps {
+                echo 'Publishing JaCoCo Coverage Report'
+                step([$class: 'JacocoPublisher',
+                      execPattern: '**/target/jacoco.exec',
+                      classPattern: '**/target/classes/**/*.class',
+                      sourcePattern: '**/src/main/java/**/*.java',
+                      exclusionPattern: '**/target/**,**/*Test*,**/_javassist/**'
+                ])
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 dir("$BASE_DIR") {
-                    withCredentials([string(credentialsId: 'SONARQUBE_TOKEN_ID', variable: 'SONAR_TOKEN')]) {
-                        script {
-                            withSonarQubeEnv('sonar courZelo') {
-                                try {
-                                        sh '''
-                                         mvn sonar:sonar \
-                                         -Dsonar.projectKey=NewcourZelo \
-                                         -Dsonar.projectName=NewcourZelo \
-                                         -Dsonar.host.url=http://192.168.33.10:9006 \
-                                         -Dsonar.token=sqp_691fa05196ef4835c6de1f2759810955b1e7f25a
-                            '''
-                                } catch (Exception e) {
-                                    error("SonarQube Analysis failed: ${e.message}")
-                                }
-                            }
-                        }
                     withSonarQubeEnv('NewcourZelo') {
                         sh '''
                             mvn sonar:sonar \
