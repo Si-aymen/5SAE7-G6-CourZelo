@@ -19,14 +19,19 @@ pipeline {
                 }
             }
         }
-                stage('Deploy to Nexus') {
-                dir('backendPidev') {
+        stage('Deploy to Nexus') {
             steps {
-                    sh 'mvn deploy -s ~/.m2/settings.xml -X'
-            }
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                        } catch (Exception e) {
+                            error "Deployment failed: ${e}"
+                        }
+                    }
                 }
+            }
         }
-
     }
     post {
         always {
