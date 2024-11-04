@@ -58,7 +58,7 @@ pipeline {
                           steps {
                               script {
                                   echo 'Setting up Prometheus and Grafana monitoring'
-                                  sh 'docker-compose -f backendPidev/monitoring/docker-compose.yml up -d'
+                                  sh 'docker-compose -f backendPidev/monitoring/docker-compose.yml up -d --remove-orphans'
                               }
                           }
                       }
