@@ -11,6 +11,13 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                echo 'Cleaning Workspace'
+                deleteDir() // Clean the workspace before starting
+            }
+        }
+
         stage('Checkout') {
             steps {
                 retry(3) { // Retry up to 3 times in case of failure
@@ -20,7 +27,7 @@ pipeline {
                               extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
                     ])
                 }
-                 sh 'ls -R'  
+                sh 'ls -R' // List all files to verify Dockerfile presence
             }
         }
 
@@ -106,26 +113,24 @@ pipeline {
             }
         }
 
-
-stage('Build Docker Image') {
-    steps {
-        script {
-            echo 'Building Docker Image'
-            sh 'docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker Image'
+                    sh "docker build -t aymenrahali/courzelo:1.0.0 -f ${env.WORKSPACE}/backendPidev/Dockerfile ${env.WORKSPACE}/backendPidev"
+                }
+            }
         }
-    }
-}
 
-
-                      stage('Deploy Image to DockerHub') {
-                          steps {
-                              script {
-                                  echo 'Logging into DockerHub and Pushing Image'
-                                  sh 'docker login -u aymenrahali -p Omen15@6631'
-                                  sh 'docker push aymenrahali/courzelo:1.0.0'
-                              }
-                          }
-                      }
+        stage('Deploy Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Logging into DockerHub and Pushing Image'
+                    sh 'docker login -u aymenrahali -p Omen15@6631'
+                    sh 'docker push aymenrahali/courzelo:1.0.0'
+                }
+            }
+        }
 
         /*stage ('Nexus') {
             steps {
