@@ -9,16 +9,23 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backendPidev') {
-                    sh 'mvn clean install'
+                    script {
+                        try {
+                            sh 'mvn clean install'
+                        } catch (Exception e) {
+                            error "Build failed: ${e}"
+                        }
+                    }
                 }
             }
         }
-        stage('Deploy to Nexus') {
-            steps {
-                dir('backendPidev') {
-                    sh 'mvn deploy -s ~/.m2/settings.xml -X'
-                }
-            }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
