@@ -20,6 +20,7 @@ pipeline {
                               extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
                     ])
                 }
+                 sh 'ls -R'  
             }
         }
 
