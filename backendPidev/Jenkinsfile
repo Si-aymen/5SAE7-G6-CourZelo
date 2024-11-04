@@ -20,9 +20,11 @@ pipeline {
             }
         }
                 stage('Deploy to Nexus') {
+                dir('backendPidev') {
             steps {
                     sh 'mvn deploy -s ~/.m2/settings.xml -X'
             }
+                }
         }
 
     }
