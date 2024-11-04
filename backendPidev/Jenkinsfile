@@ -17,13 +17,10 @@ pipeline {
                     checkout([$class: 'GitSCM',
                               branches: [[name: '*/aymen']],
                               userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
-                              extensions: [
-                                  [$class: 'CheckoutOption', timeout: 60],  // Timeout for checkout operation
-                                  [$class: 'CloneOption', shallow: true, depth: 1] // Perform a shallow clone
-                              ]
+                              extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
                     ])
                 }
-                sh 'ls -R' // List all files to verify Dockerfile presence
+                 sh 'ls -R'  
             }
         }
 
@@ -109,24 +106,26 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo 'Building Docker Image'
-                    sh "docker build -t aymenrahali/courzelo:1.0.0 -f ${env.WORKSPACE}/backendPidev/Dockerfile ${env.WORKSPACE}/backendPidev"
-                }
-            }
-        }
 
-        stage('Deploy Image to DockerHub') {
-            steps {
-                script {
-                    echo 'Logging into DockerHub and Pushing Image'
-                    sh 'docker login -u aymenrahali -p Omen15@6631'
-                    sh 'docker push aymenrahali/courzelo:1.0.0'
-                }
-            }
+stage('Build Docker Image') {
+    steps {
+        script {
+            echo 'Building Docker Image'
+            sh 'docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
         }
+    }
+}
+
+
+                      stage('Deploy Image to DockerHub') {
+                          steps {
+                              script {
+                                  echo 'Logging into DockerHub and Pushing Image'
+                                  sh 'docker login -u aymenrahali -p Omen15@6631'
+                                  sh 'docker push aymenrahali/courzelo:1.0.0'
+                              }
+                          }
+                      }
 
         /*stage ('Nexus') {
             steps {
