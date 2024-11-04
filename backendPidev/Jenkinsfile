@@ -1,19 +1,23 @@
 pipeline {
     agent any
-
-    tools {
-        maven 'M2_HOME' 
-    }
-
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                dir('backendPidev') {
+                    sh 'mvn clean install'
+                }
             }
         }
         stage('Deploy to Nexus') {
             steps {
-                sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                dir('backendPidev') {
+                    sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                }
             }
         }
     }
