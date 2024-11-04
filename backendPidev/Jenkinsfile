@@ -14,7 +14,7 @@ pipeline {
 
         
 
-        stage('Build') {
+        stage('Clean-install') {
             steps {
                 dir('backendPidev') { // Adjust if needed based on directory structure
                     sh 'mvn clean install'
@@ -22,7 +22,7 @@ pipeline {
             }
         }
       
-        stage('Test') {
+        stage('Test JUNIT ') {
                    steps {
                        dir('backendPidev') { // Adjust if needed
                            sh 'mvn test'
@@ -38,7 +38,7 @@ pipeline {
                       script {
                           echo 'Building Docker Image'
                           // Make sure to specify the correct Dockerfile path
-                          sh 'docker build -t yosra2001/devops:0.0.1 -f backendPidev/Dockerfile backendPidev'
+                          sh 'sudo docker build -t yosra2001/devops:1.0.0 -f backendPidev/Dockerfile backendPidev'
                       }
                   }
               }
@@ -49,7 +49,7 @@ pipeline {
                               script {
                                   echo 'Logging into DockerHub and Pushing Image'
                                   sh 'docker login -u yosra2001 -p machine*learning'
-                                  sh 'docker push yosra2001/devops:0.0.1'
+                                  sh 'docker push yosra2001/devops:1.0.0'
                               }
                           }
                       }
