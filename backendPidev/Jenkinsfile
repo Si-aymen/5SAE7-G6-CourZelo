@@ -5,38 +5,16 @@ pipeline {
         maven 'M2_HOME' 
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'alaa', url: 'https://github.com/Si-aymen/Courzello/new/aymen/backendPidev'
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'mvn clean install'
             }
         }
-
-        stage('Test') {
+        stage('Deploy to Nexus') {
             steps {
-                sh 'mvn test'
+                    sh 'mvn deploy -s ~/.m2/settings.xml -X'
             }
         }
-
- stage ('Nexus'){
-     steps {
-         sh 'mvn deploy';
-     }
- }
-    }
-
-    post {
-        success {
-            echo 'Build and tests succeeded!'
-        }
-        failure {
-            echo 'Build failed. Please check the logs.'
-        }
+      
     }
 }
