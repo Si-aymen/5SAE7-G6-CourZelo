@@ -54,14 +54,14 @@ pipeline {
                           }
                       }
 
-                      stage('Monitoring Setup (Prometheus & Grafana)') {
-                          steps {
-                              script {
-                                  echo 'Setting up Prometheus and Grafana monitoring'
-                                  sh 'docker-compose -f backendPidev/monitoring/docker-compose.yml up -d --remove-orphans'
-                              }
-                          }
-                      }
+                     // stage('Monitoring Setup (Prometheus & Grafana)') {
+                        //  steps {
+                          //    script {
+                            //      echo 'Setting up Prometheus and Grafana monitoring'
+                              //    sh 'docker-compose -f backendPidev/monitoring/docker-compose.yml up -d --remove-orphans'
+                    //          }
+                     //     }
+                      //}
       stage('SonarQube Analysis') {
             steps {
                 dir('backendPidev') {
