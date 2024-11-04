@@ -25,6 +25,7 @@ pipeline {
 
         stage('Build') {
             steps {
+                apk add --no-cache maven 
                 // Exécution de la construction Maven
                 sh 'mvn -f backendPidev/pom.xml clean install'
             }
