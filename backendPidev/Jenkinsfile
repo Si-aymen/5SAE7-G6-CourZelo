@@ -5,6 +5,10 @@ pipeline {
         maven 'M2_HOME' // Ensure 'M2_HOME' matches the Maven installation name in Jenkins
     }
 
+    environment {
+
+        EMAIL_RECIPIENT = 'yosra.oueslati@esprit.tn'
+    }
     stages {
       stage('Checkout') {
           steps {
@@ -90,11 +94,22 @@ pipeline {
     }
 
     post {
-        success {
-            echo 'Build and tests succeeded!'
-        }
-        failure {
-            echo 'Build failed. Please check the logs.'
-        }
-    }
+           success {
+               mail to: "${env.EMAIL_RECIPIENT}",
+                    subject: " Jenkins - Success - Build #${BUILD_NUMBER}",
+                    body: """ Jenkins
+                    Result: The pipeline has completed successfully.
+                    Build number: ${BUILD_NUMBER}. No action required."""
+           }
+           failure {
+               mail to: "${env.EMAIL_RECIPIENT}",
+                    subject: " Jenkins - Failure - Build #${BUILD_NUMBER}",
+                    body: """ Jenkins
+                    Result: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                    Please try again."""
+           }
+           always {
+               echo 'Pipeline completed.'
+           }
+       }
 }
