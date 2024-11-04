@@ -1,19 +1,12 @@
 pipeline {
-    agent {
-        docker { 
-           image 'maven:3.8.6-openjdk-11'
-        args '-u root'
-        }
+    agent any
+
+    tools {
+        maven 'M2_HOME' // Assure-toi que 'M2_HOME' correspond au nom de l'installation Maven dans Jenkins
     }
-
-    // Décommenter si nécessaire
-    // tools {
-    //     maven 'M2_HOME' // Assure-toi que 'M2_HOME' correspond au nom de l'installation Maven dans Jenkins
-    // }
-
-    // environment {
-    //     SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube
-    // }
+environment {
+        SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube 
+    }
 
     stages {
         stage('Checkout') {
@@ -25,37 +18,37 @@ pipeline {
 
         stage('Build') {
             steps {
-               sh '''
-            apk add --no-cache maven  # Install Maven in Alpine
-            mvn -f backendPidev/pom.xml clean install
-        '''
+                // Exécution de la construction Maven
+                sh 'mvn -f backendPidev/pom.xml clean install'
+
             }
         }
 
         stage('Test') {
             steps {
                 // Exécution des tests Maven
-                 sh 'mvn -f backendPidev/pom.xml clean test'
+                sh 'mvn -f backendPidev/pom.xml clean install'
+
             }
         }
 
-        // Décommenter si nécessaire
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv('admin') { // serveur SonarQube configuré dans Jenkins
-        //             sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
-        //         }
-        //     }
-        // }
-
-        // stage('Deploy to Nexus') {
-        //     steps {
-        //         // Déploiement vers Nexus, en ignorant les tests
-        //         sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
-        //     }
-        // }
+       stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
+                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
+                }
+            }
+        }
+        
+         stage('Deploy to Nexus') {
+            steps {
+                // Déploiement vers Nexus, en ignorant les tests
+                sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
+            }
+        }
     }
-    
+
+
     post {
         success {
             // Décommenter si nécessaire
