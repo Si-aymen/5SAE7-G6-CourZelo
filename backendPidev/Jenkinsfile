@@ -17,7 +17,10 @@ pipeline {
                     checkout([$class: 'GitSCM',
                               branches: [[name: '*/aymen']],
                               userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
-                              extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
+                              extensions: [
+                                  [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
+                                  [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
+                              ]
                     ])
                 }
             }
