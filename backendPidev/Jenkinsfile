@@ -15,9 +15,12 @@ pipeline {
             steps {
                 retry(3) { // Retry up to 3 times in case of failure
                     checkout([$class: 'GitSCM',
-                              branches: [[name: '*/aymen']],
+                              branches: [[name: 'refs/heads/AymenRahali-5SAE7-G4']],
                               userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
-                              extensions: [[$class: 'CheckoutOption', timeout: 60]] // Increased timeout to 60 minutes
+                              extensions: [
+                                  [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
+                                  [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
+                              ]
                     ])
                 }
             }
@@ -105,24 +108,25 @@ pipeline {
             }
         }
 
-                      stage('Build Docker Image') {
-                  steps {
-                      script {
-                          echo 'Building Docker Image'
-                          // Make sure to specify the correct Dockerfile path
-                          sh ' docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
-                      }
-                  }
-              }
-                      stage('Deploy Image to DockerHub') {
-                          steps {
-                              script {
-                                  echo 'Logging into DockerHub and Pushing Image'
-                                  sh 'docker login -u aymenrahali -p Omen15@6631'
-                                  sh 'docker push aymenrahali/courzelo:1.0.0'
-                              }
-                          }
-                      }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker Image'
+                    sh 'docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
+                }
+            }
+        }
+
+        stage('Deploy Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Logging into DockerHub and Pushing Image'
+                    sh 'docker login -u aymenrahali -p Omen15@6631'
+                    sh 'docker push aymenrahali/courzelo:1.0.0'
+                }
+            }
+        }
+
         /*stage ('Nexus') {
             steps {
                 dir("$BASE_DIR") {
@@ -147,4 +151,8 @@ pipeline {
                  Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
                  Please check the logs and take necessary actions."""
         }
+        always {
+            echo 'Pipeline completed.'
+        }
+    }
 }
