@@ -6,7 +6,7 @@ pipeline {
     }
 environment {
         SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube 
-        DOCKERHUB_TOKEN = credentials('nourchaine-dockerhub')
+        DOCKERHUB_CREDENTIALS = credentials('nourchaine-dockerhub')
     }
 
     stages {
@@ -53,10 +53,12 @@ environment {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t nourchaine/devops:latest .'
+                    sh 'docker build -t nourchaine/devops:latest .' 
                 }
             }
         }
+
+        
         stage('Login Docker') {
             steps {
                     echo 'Login to DockerHub'
@@ -69,7 +71,7 @@ environment {
             steps {
                 script {
                     echo 'Pushing Docker Image to Docker Hub'
-                    sh 'docker push -t nourchaine/devops:latest'
+                    sh 'docker push nourchaine/devops:latest'
                 }
             }
         }
