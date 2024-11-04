@@ -11,29 +11,21 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
+        stage('Checkout') {
             steps {
-                echo 'Cleaning Workspace'
-                deleteDir() // Clean the workspace before starting
+                retry(3) { // Retry up to 3 times in case of failure
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: '*/aymen']],
+                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
+                              extensions: [
+                                  [$class: 'CheckoutOption', timeout: 60],  // Timeout for checkout operation
+                                  [$class: 'CloneOption', shallow: true, depth: 1] // Perform a shallow clone
+                              ]
+                    ])
+                }
+                sh 'ls -R' // List all files to verify Dockerfile presence
             }
         }
-
-stage('Checkout') {
-    steps {
-        retry(3) { // Retry up to 3 times in case of failure
-            checkout([$class: 'GitSCM',
-                      branches: [[name: '*/aymen']],
-                      userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
-                      extensions: [
-                          [$class: 'CheckoutOption', timeout: 60],  // Increased checkout timeout to 60 minutes
-                          [$class: 'CloneOption', timeout: 60]      // Increased clone timeout to 60 minutes
-                      ]
-            ])
-        }
-        sh 'ls -R' // List all files to verify Dockerfile presence
-    }
-}
-
 
         stage('Clean-Compile') {
             steps {
