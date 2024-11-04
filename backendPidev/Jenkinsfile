@@ -53,16 +53,23 @@ environment {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t nourchainesahli/coursms:1.0.0 -f backendPidev/Dockerfile backendPidev'
+                    sh 'docker build -t nourchaine/devops:latest .'
                 }
             }
         }
+        stage('Login Docker') {
+            steps {
+                    echo 'Login to DockerHub'
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                }
+            }
+        
 
-        stage('Deploy Image to DockerHub') {
+        stage('Push Image') {
             steps {
                 script {
-                    echo 'Logging into DockerHub and Pushing Image'
-                      sh 'docker push nourchainesahli/coursms:1.0.0'
+                    echo 'Pushing Docker Image to Docker Hub'
+                    sh 'docker push -t nourchaine/devops:latest'
                 }
             }
         }
