@@ -46,6 +46,25 @@ environment {
                 sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
             }
         }
+
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker Image'
+                    sh 'docker build -t nourchainesahli/coursms:1.0.0 -f backendPidev/Dockerfile backendPidev'
+                }
+            }
+        }
+
+        stage('Deploy Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Logging into DockerHub and Pushing Image'
+                      sh 'docker push nourchainesahli/coursms:1.0.0'
+                }
+            }
+        }
     }
 
 
