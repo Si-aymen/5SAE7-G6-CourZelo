@@ -22,7 +22,11 @@ services:
       - monitoring
     depends_on:
       - prometheus
-
+  docker-exporter:
+    image: prom/docker-exporter
+    ports:
+      - "9104:9104"
+    restart: unless-stopped
 networks:
   monitoring:
     driver: bridge
