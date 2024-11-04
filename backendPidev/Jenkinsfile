@@ -147,3 +147,4 @@ pipeline {
                  Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
                  Please check the logs and take necessary actions."""
         }
+}
