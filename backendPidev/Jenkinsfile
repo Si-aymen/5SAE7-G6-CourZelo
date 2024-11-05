@@ -41,12 +41,12 @@ environment {
             }
         }
         
-      /*   stage('Deploy to Nexus') {
+        stage('Deploy to Nexus') {
             steps {
                 // Déploiement vers Nexus, en ignorant les tests
                 sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
             }
-        }  */
+        }  
         
         stage('Build Docker Image') {
             steps {
