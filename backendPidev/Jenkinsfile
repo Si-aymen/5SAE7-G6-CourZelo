@@ -21,10 +21,10 @@ pipeline {
         }
          stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
-                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
-                }
-            }
+
+        sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true';
+
+    }
         }
         stage('Deploy to Nexus') {
             steps {
