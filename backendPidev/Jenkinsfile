@@ -153,7 +153,7 @@ pipeline {
         }
         always {
             echo 'Pipeline completed.'
-            cleanWs(deleteDirs: true, disableDeferredWipeout: true) // Clean workspace after each run
+            //cleanWs(deleteDirs: true, disableDeferredWipeout: true) // Clean workspace after each run
         }
     }
 }
