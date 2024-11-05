@@ -19,6 +19,13 @@ pipeline {
                 }
             }
         }
+         stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
+                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
+                }
+            }
+        }
         stage('Deploy to Nexus') {
             steps {
                 dir('backendPidev') {
