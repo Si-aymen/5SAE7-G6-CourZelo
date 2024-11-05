@@ -19,13 +19,15 @@ pipeline {
                 }
             }
         }
-         stage('SonarQube Analysis') {
-            steps {
-
-        sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true';
-
-    }
+        
+        stage('SonarQube Analysis') {
+    steps {
+        dir('backendPidev') {
+            sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true'
         }
+    }
+}
+        
         stage('Deploy to Nexus') {
             steps {
                 dir('backendPidev') {
