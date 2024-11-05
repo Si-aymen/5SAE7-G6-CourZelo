@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t aymenrahali/courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
+                    sh 'docker build -t aymenrahali/courzelo:latest -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
@@ -122,7 +122,7 @@ pipeline {
                 script {
                     echo 'Logging into DockerHub and Pushing Image'
                     sh 'docker login -u aymenrahali -p Omen15@6631'
-                    sh 'docker push aymenrahali/courzelo:1.0.0'
+                    sh 'docker push aymenrahali/courzelo:latest'
                 }
             }
         }
