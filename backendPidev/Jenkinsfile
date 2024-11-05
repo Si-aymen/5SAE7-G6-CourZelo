@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t aymenrahali/courzelo:latest -f backendPidev/Dockerfile backendPidev'
+                    sh 'docker build -t aymenrahali/courzelo:latest --build-arg JAR_FILE=target/backend-0.0.1.jar -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
