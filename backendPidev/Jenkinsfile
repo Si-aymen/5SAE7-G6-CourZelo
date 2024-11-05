@@ -1,45 +1,44 @@
 pipeline {
     agent any
-
-    tools {
-        maven 'M2_HOME' // Ensure that 'M2_HOME' matches the Maven installation name in Jenkins
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                // Cloning the Git repository from the master branch
-                git branch: 'afi', url: 'https://github.com/Si-aymen/Courzello/new/afi/backendPidev'
+                checkout scm
             }
         }
-
         stage('Build') {
             steps {
-                // Running the Maven build
-                sh 'mvn clean install'
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn clean install'
+                        } catch (Exception e) {
+                            error "Build failed: ${e}"
+                        }
+                    }
+                }
             }
         }
-
-        stage('Test') {
+        stage('Deploy to Nexus') {
             steps {
-                // Running Maven tests
-                sh 'mvn test'
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                        } catch (Exception e) {
+                            error "Deployment failed: ${e}"
+                        }
+                    }
+                }
             }
         }
-
- stage ('Nexus'){
-     steps {
-         sh 'mvn deploy';
-     }
- }
     }
-
     post {
-        success {
-            echo 'Build and tests succeeded!'
+        always {
+            echo 'Pipeline finished.'
         }
         failure {
-            echo 'Build failed. Please check the logs.'
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
