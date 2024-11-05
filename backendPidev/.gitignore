@@ -1,5 +1,7 @@
 HELP.md  # Remove this line if you want to track HELP.md
 target/
+!target/app.jar  # Un-ignore app.jar inside target
+
 build/
 
 ### Maven Wrapper ###
