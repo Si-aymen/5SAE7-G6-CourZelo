@@ -8,7 +8,9 @@ pipeline {
     environment {
         SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube 
         DOCKERHUB_CREDENTIALS = credentials('nourchaine-dockerhub')
+        NEXUS_VERSION = "nexus3"
         NEXUS_CREDENTIALS = credentials('nexus_cred')
+        NEXUS_REPOSITORY = "maven-nexus-repo"
     }
 
     stages {
