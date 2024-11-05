@@ -127,13 +127,13 @@ pipeline {
             }
         }
 
-        /*stage ('Nexus') {
+        stage ('Nexus') {
             steps {
                 dir("$BASE_DIR") {
                     sh 'mvn deploy'
                 }
             }
-        }*/
+        }
     }
 
     post {
