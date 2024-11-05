@@ -28,7 +28,7 @@ environment {
         stage('Test') {
             steps {
                 // Exécution des tests Maven
-                sh 'mvn -f backendPidev/pom.xml clean install'
+                sh 'mvn -f backendPidev/pom.xml test'
 
             }
         }
@@ -41,19 +41,18 @@ environment {
             }
         }
         
-         stage('Deploy to Nexus') {
+      /*   stage('Deploy to Nexus') {
             steps {
                 // Déploiement vers Nexus, en ignorant les tests
                 sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
             }
-        }
-
+        }  */
         
         stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t nourchaine/devops:latest .' 
+                    sh 'docker build -t nourchaine/devops:latest -f backendPidev/Dockerfile .'
                 }
             }
         }
