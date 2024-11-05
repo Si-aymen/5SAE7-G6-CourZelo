@@ -8,6 +8,7 @@ pipeline {
     environment {
         SONARQUBE_TOKEN = credentials('jenkins-sonar') // ID du token SonarQube 
         DOCKERHUB_CREDENTIALS = credentials('nourchaine-dockerhub')
+        NEXUS_CREDENTIALS = credentials('nexus_cred')
     }
 
     stages {
@@ -45,7 +46,7 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 // Déploiement vers Nexus, en ignorant les tests
-                sh 'mvn clean -f backendPidev/pom.xml deploy -DskipTests'
+                sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
             }
         }
 
