@@ -41,7 +41,7 @@ pipeline {
             }
         }
         */
-
+       
         stage('Deploy to Nexus') {
             steps {
                 // Déploiement vers Nexus, en ignorant les tests
