@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:11
 
 # Set the JAR name as a build argument
 ARG JAR_FILE=target/app.jar
