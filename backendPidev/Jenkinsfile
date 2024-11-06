@@ -21,12 +21,12 @@ pipeline {
                 sh 'git config --global http.postBuffer 1048576000'
 
                 // Clonage du dépôt Git depuis la branche nourchaine
-               // git branch: 'nourchaine', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+               // 
         sh 'git config --global http.maxRequestBuffer 524288000'
         sh 'git config --global core.compression 9'
         sh 'git config --global http.lowSpeedLimit 1024'
         sh 'git config --global http.lowSpeedTime 60'
-        sh 'git clone -b nourchaine https://github.com/Si-aymen/Courzelo-Devops.git .'
+        git branch: 'nourchaine', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
             }
         }
 
