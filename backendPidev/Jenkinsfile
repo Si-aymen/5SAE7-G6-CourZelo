@@ -35,7 +35,16 @@ pipeline {
                 }
             }
         }
-
+        
+        stage('Deploy Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Logging into DockerHub and Pushing Image'
+                    sh 'docker login -u seif2066 -p 201JMT4460'
+                    sh 'docker push seifafi/courzelo:latest'
+                }
+            }
+        }
 
         stage('Deploy to Nexus') {
             steps {
