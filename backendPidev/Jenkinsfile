@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t seifafi/courzelo:latest --build-arg JAR_FILE=target/devops-integration.jar -f backendPidev/Dockerfile backendPidev'
+                    sh 'sudo docker build -t seifafi/courzelo:latest --build-arg JAR_FILE=target/devops-integration.jar -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
