@@ -27,7 +27,24 @@ pipeline {
         }
     }
 }
-        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker Image'
+                    sh 'docker build -t seifafi/courzelo:latest --build-arg JAR_FILE=target/app.jar -f backendPidev/Dockerfile backendPidev'
+                }
+            }
+        }
+
+        stage('Deploy Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Logging into DockerHub and Pushing Image'
+                    sh 'docker login -u seif2066 -p 201JMT4460'
+                    sh 'docker push seifafi/courzelo:latest'
+                }
+            }
+        }
         stage('Deploy to Nexus') {
             steps {
                 dir('backendPidev') {
