@@ -93,5 +93,5 @@ pipeline {
                  body: "Le build a échoué pour ${env.JOB_NAME} - ${env.BUILD_NUMBER}. Consultez les détails ici : ${env.BUILD_URL}"
         }
         }
-    }
+    
 }
