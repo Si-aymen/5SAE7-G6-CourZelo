@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuestionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.Controller</a> &gt; <span class="el_source">QuestionController.java</span></div><h1>QuestionController.java</h1><pre class="source lang-java linenums">package com.pidev.backend.Controller;
+
+import com.pidev.backend.Entity.Question;
+import com.pidev.backend.ServiceImpl.QuestionServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@CrossOrigin(origins = &quot;*&quot;,exposedHeaders=&quot;Access-Control-Allow-Origin&quot; )
+@RestController
+@RequestMapping(&quot;/question&quot;)
+<span class="nc" id="L14">public class QuestionController {</span>
+
+    @Autowired
+    QuestionServiceImpl questionserv;
+    @PostMapping(&quot;/add-question/{id-user}&quot;)
+    @ResponseBody
+    public Question ajoutquestion(@RequestBody Question p,@PathVariable(&quot;id-user&quot;) String idu) {
+<span class="nc" id="L21">        return questionserv.ajoutQuestion(p,idu);</span>
+
+    }
+    @GetMapping(&quot;/get-questionbyid/{id-question}&quot;)
+    @ResponseBody
+    public Question getquestionbyid(@PathVariable(&quot;id-question&quot;) String idq) {
+<span class="nc" id="L27">        return questionserv.affichDetailQuestion(idq);</span>
+
+    }
+    @GetMapping(&quot;/get-questions&quot;)
+    @ResponseBody
+    public List&lt;Question&gt; afficherlesquestions() {
+<span class="nc" id="L33">        return questionserv.afficherQuestions();</span>
+
+    }
+    @GetMapping(&quot;/get-questions-by-contenue&quot;)
+    @ResponseBody
+    public List&lt;Question&gt; affichQuestionsByName(@RequestParam(&quot;contenue&quot;) String contenue)
+    {
+<span class="nc" id="L40">        return questionserv.getQuestionsByContenue(contenue);</span>
+
+    }
+    @PutMapping(&quot;/update-question/{id-question}&quot;)
+    @ResponseBody
+    public Question upadatequestion(@RequestBody Question t, @PathVariable(&quot;id-question&quot;) String idq) {
+<span class="nc" id="L46">        return questionserv.updateQuestion(idq,t);</span>
+
+    }
+    @DeleteMapping(&quot;/delete-question/{id-question}&quot;)
+    @ResponseBody
+    public void deletequestion(@PathVariable(&quot;id-question&quot;) String idq) {
+<span class="nc" id="L52">         questionserv.deleteQuestion(idq);</span>
+
+<span class="nc" id="L54">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

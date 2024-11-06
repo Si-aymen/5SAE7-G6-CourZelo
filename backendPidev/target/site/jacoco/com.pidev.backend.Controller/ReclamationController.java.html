@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReclamationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.Controller</a> &gt; <span class="el_source">ReclamationController.java</span></div><h1>ReclamationController.java</h1><pre class="source lang-java linenums">package com.pidev.backend.Controller;
+
+import com.pidev.backend.Entity.Attachment;
+import com.pidev.backend.Entity.Notification;
+import com.pidev.backend.Entity.Reclamation;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Service.AttachementService;
+import com.pidev.backend.Service.NotificationService;
+import com.pidev.backend.Service.ReclamationService;
+import com.pidev.backend.Service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+@CrossOrigin(origins = &quot;*&quot;,exposedHeaders=&quot;Access-Control-Allow-Origin&quot; )
+
+
+
+@RestController
+<span class="nc" id="L26">@AllArgsConstructor</span>
+@RequestMapping(&quot;/reclamations&quot;)
+public class ReclamationController {
+    private ReclamationService reclamationService;
+    private AttachementService attachment_service;
+    private UserService userService;
+    private NotificationService notificationService;
+
+    @GetMapping(&quot;/get_all&quot;)
+    public List&lt;Reclamation&gt; getAllReclamations() {
+<span class="nc" id="L36">        return reclamationService.getAllReclamations();</span>
+    }
+    @GetMapping(&quot;/get/{id}&quot;)
+    public Reclamation getReclamationById(@PathVariable String id) {
+<span class="nc" id="L40">        return reclamationService.getReclamationById(id);</span>
+    }
+    @PostMapping(&quot;/post&quot;)
+    public Reclamation createReclamation(@RequestBody PostReclamationRequestModel request) {
+<span class="nc" id="L44">        Reclamation rec = request.getRec();</span>
+<span class="nc" id="L45">        Attachment att = request.getAtt();</span>
+
+        // Assurez-vous que l'objet User est correctement associé à la réclamation
+<span class="nc" id="L48">        User user = userService.getUserByLogin(rec.getUser().getId());</span>
+<span class="nc" id="L49">        rec.setUser(user);</span>
+
+        // Créez la réclamation
+<span class="nc" id="L52">        rec = reclamationService.createReclamation(rec);</span>
+
+        // Assurez-vous que l'objet Attachment est présent avant de l'associer à la réclamation
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (att != null) {</span>
+<span class="nc" id="L56">            att.setReclamation(rec);</span>
+<span class="nc" id="L57">            att = attachment_service.createAttachement(att);</span>
+<span class="nc" id="L58">            rec.setAttachment(att);</span>
+        }
+
+        // Envoyez une notification à l'utilisateur concerné
+<span class="nc" id="L62">        sendNotificationToUser(user.getId(), &quot;Votre réclamation a été créée avec succès!&quot;);</span>
+
+<span class="nc" id="L64">        return rec;</span>
+    }
+
+    private void sendNotificationToUser(String userId, String message) {
+        // Utilisez votre service de notification pour envoyer la notification
+<span class="nc" id="L69">        notificationService.sendNotification(userId, new Notification(message));</span>
+<span class="nc" id="L70">    }</span>
+
+
+    @PutMapping(&quot;/put/{id}&quot;)
+    public ResponseEntity&lt;Reclamation&gt; updateReclamation(@PathVariable String id, @RequestBody Reclamation updatedReclamation) {
+
+            // Perform input validation to check if the provided ID is valid
+<span class="nc" id="L77">            Reclamation existingReclamation = reclamationService.getReclamationById(id);</span>
+
+
+            // Update the Reclamation
+<span class="nc" id="L81">            Reclamation updatedRec = reclamationService.updateReclamation(updatedReclamation);</span>
+
+<span class="nc" id="L83">            return ResponseEntity.ok(updatedRec);</span>
+
+    }
+
+
+
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public ResponseEntity&lt;String&gt; deleteReclamation(@PathVariable String id) {
+        try {
+            // Retrieve the Reclamation by ID
+<span class="nc" id="L93">            Reclamation rec = reclamationService.getReclamationById(id);</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (rec != null) {</span>
+                // Retrieve the Attachment from the Reclamation
+<span class="nc" id="L97">                Attachment attachment = rec.getAttachment();</span>
+
+                // Delete the Attachment if it exists
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (attachment != null) {</span>
+<span class="nc" id="L101">                    attachment_service.deleteAttachement(attachment.getId());</span>
+                }
+
+                // Delete the Reclamation
+<span class="nc" id="L105">                reclamationService.deleteReclamation(id);</span>
+
+                // Send a notification to the user that the Reclamation has been deleted
+<span class="nc" id="L108">                sendNotificationToUser(rec.getUser().getId(), &quot;Votre réclamation a été supprimée avec succès.&quot;);</span>
+
+<span class="nc" id="L110">                return ResponseEntity.ok(&quot;Reclamation deleted successfully&quot;);</span>
+            } else {
+                // Handle the case where Reclamation with the given ID is not found
+<span class="nc" id="L113">                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Reclamation not found with ID: &quot; + id);</span>
+            }
+<span class="nc" id="L115">        } catch (Exception e) {</span>
+            // Handle any other exceptions that might occur during deletion
+<span class="nc" id="L117">            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(&quot;Error deleting Reclamation&quot;);</span>
+        }
+    }
+
+
+
+    @DeleteMapping(&quot;/delete_all&quot;)
+    public void deleteAllReclamation() {
+<span class="nc" id="L125">        reclamationService.deleteAllReclamations();</span>
+<span class="nc" id="L126">    }</span>
+    @GetMapping(&quot;/statistics&quot;)
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; getReclamationStatistics() {
+<span class="nc" id="L129">        Map&lt;String, Object&gt; statistics = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L130">        statistics.put(&quot;totalReclamations&quot;, reclamationService.getTotalReclamations());</span>
+<span class="nc" id="L131">        statistics.put(&quot;reclamationsByState&quot;, reclamationService.getReclamationsByStateCount());</span>
+
+<span class="nc" id="L133">        return ResponseEntity.ok(statistics);</span>
+    }
+    @GetMapping(&quot;/get_by_user&quot;)
+    public List&lt;Reclamation&gt; getReclamationsByUser(@RequestParam String userId) {
+<span class="nc" id="L137">        return reclamationService.getReclamationsByUser(userId);</span>
+    }
+    @PutMapping(&quot;/optimize_priorities&quot;)
+    public ResponseEntity&lt;String&gt; optimizePriorities() {
+<span class="nc" id="L141">        reclamationService.updatePriorities();</span>
+<span class="nc" id="L142">        return ResponseEntity.ok(&quot;Priorities optimized successfully&quot;);</span>
+    }
+
+    @GetMapping(&quot;/advanced_statistics&quot;)
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; getAdvancedStatistics() {
+<span class="nc" id="L147">        Map&lt;String, Object&gt; statistics = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L148">        statistics.put(&quot;averageResolutionTime&quot;, reclamationService.getAverageResolutionTime());</span>
+<span class="nc" id="L149">        statistics.put(&quot;pendingReclamationsCount&quot;, reclamationService.getPendingReclamationsCount());</span>
+        // Ajoutez d'autres métriques en fonction de vos besoins
+
+<span class="nc" id="L152">        return ResponseEntity.ok(statistics);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

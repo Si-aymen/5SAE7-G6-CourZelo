@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.Controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.pidev.backend.Controller;
+
+import com.pidev.backend.Entity.Role;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.Service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@RestController
+<span class="nc" id="L15">@AllArgsConstructor</span>
+@CrossOrigin(origins = &quot;*&quot;,exposedHeaders=&quot;Access-Control-Allow-Origin&quot; )
+@RequestMapping(&quot;/users&quot;)
+public class UserController {
+
+    private UserService userService;
+    private UserRepository userRepository;
+
+    @GetMapping(&quot;/GetAllUsers&quot;)
+    public List&lt;User&gt; getAllUsers() {
+<span class="nc" id="L25">        return userService.getAllUsers();</span>
+    }
+    @GetMapping(&quot;/teachers&quot;)
+    public  List&lt;User&gt; getTeachers()
+    {
+<span class="nc" id="L30">        List&lt;User&gt; teachers = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        for (User u: userService.getAllUsers()</span>
+        ) {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if(u.getRole()==Role.TEACHER){</span>
+<span class="nc" id="L34">                teachers.add(u);</span>
+            }
+
+<span class="nc" id="L37">        }</span>
+<span class="nc" id="L38">        return teachers;</span>
+    }
+
+    @GetMapping(&quot;/{login}&quot;)
+    public User getUserByLogin(@PathVariable String login) {
+<span class="nc" id="L43">        return userService.getUserByLogin(login);</span>
+    }
+
+    @GetMapping(&quot;/id/{id}&quot;)
+    public User getUserById(@PathVariable String id) {
+<span class="nc" id="L48">        return userService.getUserById(id);</span>
+    }
+
+
+    @PostMapping(&quot;/Save/user&quot;)
+    public User createUser(@RequestBody User user) {
+<span class="nc" id="L54">        return userService.createUser(user);</span>
+    }
+
+    @PutMapping(&quot;/{login}&quot;)
+    public User updateUser(@PathVariable String login, @RequestBody User user) {
+<span class="nc" id="L59">        return userService.updateUser(login, user);</span>
+    }
+
+    @DeleteMapping(&quot;/{login}&quot;)
+    public void deleteUser(@PathVariable String login) {
+<span class="nc" id="L64">        userService.deleteUser(login);</span>
+<span class="nc" id="L65">    }</span>
+
+
+    @PostMapping(&quot;signin/{login}/{pwd}&quot;)
+    public boolean signinAdmin(@PathVariable String login, @PathVariable String pwd){
+<span class="nc" id="L70">        User user=userRepository.findUserByLogin(login);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if(user!=null){</span>
+<span class="nc" id="L72">            User.CONNECTEDUSER=user;</span>
+        }
+<span class="nc bnc" id="L74" title="All 8 branches missed.">        return (user!=null) &amp;&amp; (Objects.equals(user.getPassword(), pwd) &amp;&amp; user.getRole()== Role.ADMIN || user.getRole()==Role.TEACHER);</span>
+    }
+
+
+    @PostMapping(&quot;login/{login}/{pwd}&quot;)
+    public boolean signin(@PathVariable String login, @PathVariable String pwd){
+<span class="nc" id="L80">        User user=userRepository.findUserByLogin(login);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if(user!=null){</span>
+<span class="nc" id="L82">            User.CONNECTEDUSER=user;</span>
+        }
+<span class="nc bnc" id="L84" title="All 4 branches missed.">        return (user!=null) &amp;&amp; (Objects.equals(user.getPassword(), pwd));</span>
+    }
+
+    @GetMapping(&quot;/connectedUser&quot;)
+    public User getConnectedUser()
+    {
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if(User.CONNECTEDUSER!=null){</span>
+<span class="nc" id="L91">            return User.CONNECTEDUSER;</span>
+        }
+<span class="nc" id="L93">        return null;</span>
+    }
+    @GetMapping(&quot;/classroom/{classroomId}&quot;)
+    public List&lt;User&gt; getUsersByClassroom(@PathVariable String classroomId) {
+<span class="nc" id="L97">        List&lt;User&gt; users = userService.getUsersByClassroom(classroomId);</span>
+<span class="nc" id="L98">        return  users ;</span>
+    }
+
+    @GetMapping(&quot;/GetTeachers/{classroomId}&quot;)
+    public List&lt;User&gt; getTeachersOfclassroom(@PathVariable String classroomId) {
+<span class="nc" id="L103">        return userService.getTeachersOFClassroom(classroomId);</span>
+    }
+
+
+    @GetMapping(&quot;/GetStudents/{classroomId}&quot;)
+    public List&lt;User&gt; getStudentsOfclassroom(@PathVariable String classroomId) {
+<span class="nc" id="L109">        return userService.getStudentsOFClassroom(classroomId);</span>
+    }
+
+
+    @PostMapping(&quot;/follow/{id}&quot;)
+    @CrossOrigin(origins = &quot;http://localhost:4200&quot;)
+    public void followUser(@PathVariable String id) {
+<span class="nc" id="L116">        User user = userService.getUserById(id);</span>
+<span class="nc" id="L117">        User connectedUser = userRepository.getUserById(User.CONNECTEDUSER.getId());</span>
+<span class="nc" id="L118">        System.out.println(connectedUser.getFollowing().contains(user));</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (!connectedUser.getFollowing().contains(user)) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (User.CONNECTEDUSER.getFollowing().isEmpty()) {</span>
+<span class="nc" id="L121">                List&lt;User&gt; users = new ArrayList&lt;User&gt;();</span>
+<span class="nc" id="L122">                users.add(user);</span>
+<span class="nc" id="L123">                connectedUser.setFollowing(users);</span>
+<span class="nc" id="L124">                userService.updateUser(connectedUser.getLogin(), connectedUser);</span>
+<span class="nc" id="L125">            } else {</span>
+<span class="nc" id="L126">                connectedUser.getFollowing().add(user);</span>
+<span class="nc" id="L127">                userService.updateUser(connectedUser.getLogin(), connectedUser);</span>
+            }
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (user.getFollowers().isEmpty()) {</span>
+<span class="nc" id="L130">                List&lt;User&gt; followers = new ArrayList&lt;User&gt;();</span>
+<span class="nc" id="L131">                followers.add(connectedUser);</span>
+<span class="nc" id="L132">                user.setFollowers(followers);</span>
+<span class="nc" id="L133">                userService.updateUser(user.getLogin(), user);</span>
+<span class="nc" id="L134">            } else {</span>
+<span class="nc" id="L135">                user.getFollowers().add(connectedUser);</span>
+<span class="nc" id="L136">                userService.updateUser(user.getLogin(), user);</span>
+            }
+
+        }
+<span class="nc" id="L140">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

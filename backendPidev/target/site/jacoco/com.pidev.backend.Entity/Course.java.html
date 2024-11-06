@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Course.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.Entity</a> &gt; <span class="el_source">Course.java</span></div><h1>Course.java</h1><pre class="source lang-java linenums">package com.pidev.backend.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.*;
+
+@Getter
+<span class="nc" id="L18">@Setter</span>
+<span class="nc" id="L19">@AllArgsConstructor</span>
+<span class="nc" id="L20">@NoArgsConstructor</span>
+@Document(collection = &quot;Courses&quot;)
+public class Course {
+
+    @MongoId
+    // details course
+<span class="nc" id="L26">    private String id;</span>
+<span class="nc" id="L27">    private int index ;</span>
+<span class="nc" id="L28">    private String courseName;</span>
+<span class="nc" id="L29">    private String courseLevel;</span>
+<span class="nc" id="L30">    private String url ;</span>
+<span class="nc" id="L31">    private String organization ;</span>
+<span class="nc" id="L32">    private String platform ;</span>
+<span class="nc" id="L33">    private Speciality courseDomain;</span>
+<span class="nc" id="L34">    private Long courseDuration;</span>
+<span class="nc" id="L35">    private Date dateAdded;</span>
+<span class="nc" id="L36">    private float coursePrice ;</span>
+<span class="nc" id="L37">    private  String courseDescription  ;</span>
+    //upload course
+<span class="nc" id="L39">    private String pdfUrl;</span>
+<span class="nc" id="L40">    private String videoUrl;</span>
+<span class="nc" id="L41">    private List&lt;Float&gt; ratingList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L42">    private float avRating ;</span>
+    @JsonDeserialize
+<span class="nc" id="L44">    private String imgURL;</span>
+    @JsonDeserialize
+<span class="nc" id="L46">    private String imagePath ;</span>
+
+
+
+    //Enrol
+<span class="nc" id="L51">    @DBRef</span>
+<span class="nc" id="L52">    private Set&lt;User&gt; studentEnroling = new HashSet&lt;&gt;();</span>
+
+    //Chapters of course
+<span class="nc" id="L55">    @DBRef</span>
+<span class="nc" id="L56">    private Set&lt;Chapter&gt; chapters = new HashSet&lt;&gt;();</span>
+
+    //classroom of the course
+<span class="nc" id="L59">    @DBRef</span>
+<span class="nc" id="L60">    private Set&lt;Classroom&gt; classrooms = new HashSet&lt;&gt;();</span>
+
+    //User rate the course
+<span class="nc" id="L63">    @DBRef</span>
+<span class="nc" id="L64">    private Set&lt;User&gt; UsersRated = new HashSet&lt;&gt;();</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

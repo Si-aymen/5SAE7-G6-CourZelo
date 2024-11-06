@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChapterServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.ServiceImpl</a> &gt; <span class="el_source">ChapterServiceImpl.java</span></div><h1>ChapterServiceImpl.java</h1><pre class="source lang-java linenums">package com.pidev.backend.ServiceImpl;
+
+import com.pidev.backend.Entity.*;
+import com.pidev.backend.Repository.ChapterRepository;
+import com.pidev.backend.Repository.CourseRepository;
+import com.pidev.backend.Service.ChapterService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Service
+<span class="nc" id="L17">@AllArgsConstructor</span>
+public class ChapterServiceImpl implements ChapterService {
+
+    @Autowired
+    private EmailSenderService senderService;
+
+    ChapterRepository chapterRepository ;
+    CourseRepository courseRepository ;
+    @Override
+    public Chapter addChapter(Chapter chapter) {
+
+<span class="nc" id="L28">        senderService.sendSimpleEmail(&quot;rahali.aymen2001@gmail.com&quot;,</span>
+                &quot;Courzello Classrooms &quot;,
+                &quot;A new Classroom was added \n&quot; +
+<span class="nc" id="L31">                        &quot;chapter ID:&quot; + chapter.getId()+&quot;\n&quot;+</span>
+<span class="nc" id="L32">                        &quot;chapter Name:&quot; + chapter.getChapterName()+&quot;\n&quot;+</span>
+<span class="nc" id="L33">                        &quot;chapter Duration  :&quot; + chapter.getDuration()+&quot;\n&quot;+</span>
+<span class="nc" id="L34">                        &quot;chapter Courses:&quot; + chapter.getCourses()+&quot;\n&quot;</span>
+        );
+<span class="nc" id="L36">        return chapterRepository.save(chapter);</span>
+    }
+
+    @Override
+    public List&lt;Chapter&gt; getAllChapters() {
+<span class="nc" id="L41">       return chapterRepository.findAll();</span>
+    }
+
+    @Override
+    public Chapter modifyChapter(Chapter chapter) {
+<span class="nc" id="L46">        return chapterRepository.save(chapter);</span>
+    }
+
+    @Override
+    public void deleteChapter(String ChapterId) {
+<span class="nc" id="L51">        Chapter c = chapterRepository.findById(ChapterId).get();</span>
+<span class="nc" id="L52">        chapterRepository.delete(c);</span>
+
+<span class="nc" id="L54">    }</span>
+
+    @Override
+    public void assignChapterToCourse(List&lt;Chapter&gt; chapterList, String idCourse) {
+
+
+<span class="nc" id="L60">        Set&lt;Chapter&gt; chapterSet = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L61">            Course course = courseRepository.findById(idCourse).get();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for (Chapter s : chapterList) {</span>
+<span class="nc" id="L63">            s.getCourses().add(course);</span>
+<span class="nc" id="L64">            chapterRepository.save(s);</span>
+<span class="nc" id="L65">            course.getChapters().add(s);</span>
+<span class="nc" id="L66">            courseRepository.save(course);</span>
+
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">    }</span>
+
+
+
+    public List&lt;Chapter&gt; GetChapterByCourse(String classroomId) {
+
+<span class="nc" id="L75">        List&lt;Chapter&gt; Chapter = chapterRepository.findAll();</span>
+<span class="nc" id="L76">        List&lt;Chapter&gt; ChapterInClassroom = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        for (Chapter chapter : Chapter) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            for (Course course : chapter.getCourses()) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (course.getId().equals(classroomId)) {</span>
+<span class="nc" id="L80">                    ChapterInClassroom.add(chapter);</span>
+<span class="nc" id="L81">                    break;</span>
+                }
+<span class="nc" id="L83">            }</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">        return ChapterInClassroom;</span>
+
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileStorageService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.ServiceImpl</a> &gt; <span class="el_source">FileStorageService.java</span></div><h1>FileStorageService.java</h1><pre class="source lang-java linenums">package com.pidev.backend.ServiceImpl;
+
+import com.pidev.backend.Entity.FileDB;
+import com.pidev.backend.Entity.Reponse;
+import com.pidev.backend.Repository.FileDBRepository;
+import com.pidev.backend.Repository.ReponseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+
+@Service
+<span class="nc" id="L19">public class FileStorageService {</span>
+	Long idf;
+  @Autowired
+  private FileDBRepository fileDBRepo;
+
+  @Autowired
+  ReponseRepository reponserepo;
+
+	public List&lt;String&gt; store(List&lt;MultipartFile&gt; files) throws IOException {
+<span class="nc" id="L28">		List&lt;String&gt; ids = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		for (MultipartFile file : files) {</span>
+<span class="nc" id="L30">			String fileName = StringUtils.cleanPath(file.getOriginalFilename());</span>
+<span class="nc" id="L31">			FileDB fileEntity = new FileDB(fileName, file.getContentType(), file.getBytes());</span>
+<span class="nc" id="L32">			FileDB savedFile = fileDBRepo.save(fileEntity);</span>
+<span class="nc" id="L33">			ids.add(savedFile.getId());</span>
+<span class="nc" id="L34">		}</span>
+<span class="nc" id="L35">		return ids;</span>
+	}
+
+  public void deletefile(String idfile) {
+
+<span class="nc" id="L40">	  fileDBRepo.deleteById(idfile);</span>
+<span class="nc" id="L41">  }</span>
+  public FileDB getFile(String id) {
+<span class="nc" id="L43">    return fileDBRepo.findById(id).orElse(null);</span>
+  }
+  
+  //renvoi sous forme de strem
+  public Stream&lt;FileDB&gt; getAllFiles() {
+<span class="nc" id="L48">    return fileDBRepo.findAll().stream();</span>
+  }
+
+  public List&lt;FileDB&gt; getFileByReponse(String id) {
+<span class="nc" id="L52">	  Reponse t =reponserepo.findById(id).orElse(null);</span>
+<span class="nc" id="L53">	    return t.getFiles();</span>
+	  }
+  public void affecterFileToReponse(List&lt;String&gt; idFiles, String idReponse) {
+<span class="nc" id="L56">		Reponse t=reponserepo.findById(idReponse).orElse(null);</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		for(String s: idFiles){</span>
+<span class="nc" id="L59">			FileDB f=fileDBRepo.findById(s).orElse(null);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">			if(t.getFiles()==null){//si la liste des f associe a la reponse est vide</span>
+<span class="nc" id="L61">				List&lt;FileDB&gt; lfs=new ArrayList&lt;FileDB&gt;(); //cree une nouvelle liste de f</span>
+<span class="nc" id="L62">				lfs.add(f);</span>
+<span class="nc" id="L63">				t.setFiles(lfs);</span>
+<span class="nc" id="L64">				reponserepo.save(t);</span>
+<span class="nc" id="L65">			}else{</span>
+<span class="nc" id="L66">				t.getFiles().add(f);</span>
+<span class="nc" id="L67">				reponserepo.save(t);</span>
+			}
+
+
+<span class="nc" id="L71">		}</span>
+
+
+<span class="nc" id="L74">	}</span>
+
+
+ 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttachementController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.Controller</a> &gt; <span class="el_source">AttachementController.java</span></div><h1>AttachementController.java</h1><pre class="source lang-java linenums">package com.pidev.backend.Controller;
+
+
+import com.pidev.backend.Entity.Attachment;
+import com.pidev.backend.Service.AttachementService;
+import com.pidev.backend.Service.ReclamationService;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+<span class="nc" id="L13">@AllArgsConstructor</span>
+@RequestMapping(&quot;/attachements&quot;)
+public class AttachementController {
+    private AttachementService attachement_service;
+    private ReclamationService reclamation_service;
+    @GetMapping(&quot;/get_all&quot;)
+    public List&lt;Attachment&gt; getAllAttachements() {
+<span class="nc" id="L20">        return attachement_service.getAllAttachements();</span>
+    }
+    @GetMapping(&quot;/get/{id}&quot;)
+    public Attachment getAttachementById(@PathVariable String id) {
+<span class="nc" id="L24">        return attachement_service.getAttachementById(id);</span>
+    }
+    @PostMapping(&quot;/post&quot;)
+    public Attachment createAttachement(@RequestBody Attachment attachment) {
+<span class="nc" id="L28">        return attachement_service.createAttachement(attachment);</span>
+    }
+    @PutMapping(&quot;/put&quot;)
+    public Attachment updateAttachement(@RequestBody Attachment attachment) {
+<span class="nc" id="L32">        return attachement_service.updateAttachement(attachment);</span>
+    }
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public void deleteAttachement(@PathVariable String id) {
+<span class="nc" id="L36">        attachement_service.deleteAttachement(id);</span>
+<span class="nc" id="L37">    }</span>
+    @DeleteMapping(&quot;/delete_all&quot;)
+    public void deleteAllAttachement() {
+<span class="nc" id="L40">        attachement_service.deleteAllAttachements();</span>
+<span class="nc" id="L41">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

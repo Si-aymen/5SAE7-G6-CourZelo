@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClassroomServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.ServiceImpl</a> &gt; <span class="el_source">ClassroomServiceImpl.java</span></div><h1>ClassroomServiceImpl.java</h1><pre class="source lang-java linenums">package com.pidev.backend.ServiceImpl;
+
+import com.pidev.backend.Entity.Classroom;
+import com.pidev.backend.Entity.Course;
+import com.pidev.backend.Entity.Role;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.ClassroomRepository;
+import com.pidev.backend.Repository.CourseRepository;
+import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.Service.ClassroomService;
+import com.pidev.backend.Service.UserService;
+import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+@Service
+<span class="nc" id="L25">@AllArgsConstructor</span>
+public class ClassroomServiceImpl implements ClassroomService {
+
+    @Autowired
+    private EmailSenderService senderService;
+
+
+    ClassroomRepository classroomRepository ;
+    UserRepository userRepository ;
+    CourseRepository courseRepository ;
+    @Override
+    public List&lt;Classroom&gt; GetAllClassrooms() {
+<span class="nc" id="L37">        return classroomRepository.findAll() ;     }</span>
+
+    @Override
+    public Classroom GetClassroomByClassroomLevel(String lvl) {
+<span class="nc" id="L41">        return classroomRepository.getClassroomByClassroomName( lvl);</span>
+    }
+
+    @Override
+    public Classroom AddClassroom(Classroom classroom) {
+
+
+<span class="nc" id="L48">        senderService.sendSimpleEmail(&quot;rahali.aymen2001@gmail.com&quot;,</span>
+                &quot;Courzello Classrooms &quot;,
+                &quot;A new Classroom was added \n&quot; +
+<span class="nc" id="L51">                        &quot;Classroom ID:&quot; + classroom.getId()+&quot;\n&quot;+</span>
+<span class="nc" id="L52">                        &quot;Classroom name:&quot; + classroom.getClassroomName()+&quot;\n&quot;+</span>
+<span class="nc" id="L53">                        &quot;Classroom capacity  :&quot; + classroom.getClassroomCapacity()+&quot;\n&quot;+</span>
+<span class="nc" id="L54">                        &quot;Classroom teachers:&quot; + classroom.getTeachers()+&quot;\n&quot;+</span>
+<span class="nc" id="L55">                        &quot;Classroom :&quot; + classroom.getClassroomLvl()+&quot;\n&quot;</span>
+                        );
+<span class="nc" id="L57">        return classroomRepository.save(classroom) ;</span>
+    }
+
+    @Override
+    public Classroom UpdateClassroom(Classroom classroom) {
+<span class="nc" id="L62">        return null;</span>
+    }
+
+    @Override
+    public void DeleteClassroom(String Name) {
+<span class="nc" id="L67">        Classroom c = classroomRepository.getClassroomByClassroomName(Name);</span>
+<span class="nc" id="L68">        classroomRepository.delete(c);</span>
+
+<span class="nc" id="L70">    }</span>
+
+
+
+    @Override
+    public void AddTeachersToClassroom(String IdClassroom, List&lt;String&gt; ListeTeacherLogin) {
+<span class="nc" id="L76">        Classroom c = classroomRepository.getClassroomByClassroomName(IdClassroom);</span>
+        //Set&lt;User&gt; teachers = new HashSet&lt;&gt;();
+<span class="nc" id="L78">        System.out.println(c.getId());</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for (String s : ListeTeacherLogin) {</span>
+<span class="nc" id="L81">            User u = userRepository.getUserByLoginAndRole(s, Role.TEACHER);</span>
+<span class="nc" id="L82">            System.out.println(u.getLogin());</span>
+<span class="nc" id="L83">            u.getClassrooms().add(c);</span>
+<span class="nc" id="L84">            userRepository.save(u);</span>
+            //teachers.add(u);
+<span class="nc" id="L86">            c.getTeachers().add(u);</span>
+<span class="nc" id="L87">            classroomRepository.save(c);</span>
+
+<span class="nc" id="L89">        }</span>
+        //c.setTeachers(teachers);
+
+
+<span class="nc" id="L93">    }</span>
+
+    @Override
+    public void AddStudnetsToClassroom(String IdClassroom, List&lt;String&gt; ListeStudentsLogin) {
+<span class="nc" id="L97">        Classroom c = classroomRepository.getClassroomByClassroomName(IdClassroom);</span>
+<span class="nc" id="L98">        System.out.println(c.getId());</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (String s : ListeStudentsLogin) {</span>
+<span class="nc" id="L101">            User u = userRepository.getUserByLoginAndRole(s, Role.STUDENT);</span>
+<span class="nc" id="L102">            System.out.println(u.getLogin());</span>
+<span class="nc" id="L103">            u.getClassrooms().add(c);</span>
+<span class="nc" id="L104">            userRepository.save(u);</span>
+<span class="nc" id="L105">            c.getStudnets().add(u);</span>
+<span class="nc" id="L106">            classroomRepository.save(c);</span>
+
+<span class="nc" id="L108">        }</span>
+
+<span class="nc" id="L110">    }</span>
+
+    @Override
+    public void AddCoursesToClassroom(String IdClassroom, List&lt;String&gt; ListeCourseesID) {
+<span class="nc" id="L114">        Classroom c = classroomRepository.getClassroomByClassroomName(IdClassroom);</span>
+<span class="nc" id="L115">        System.out.println(c.getId());</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (String s : ListeCourseesID) {</span>
+<span class="nc" id="L118">            Course course = courseRepository.findById(s).get();</span>
+<span class="nc" id="L119">            System.out.println(course.getCourseName());</span>
+<span class="nc" id="L120">            course.getClassrooms().add(c);</span>
+<span class="nc" id="L121">            courseRepository.save(course);</span>
+<span class="nc" id="L122">            c.getCourses().add(course);</span>
+<span class="nc" id="L123">            classroomRepository.save(c);</span>
+
+<span class="nc" id="L125">        }</span>
+
+<span class="nc" id="L127">    }</span>
+
+    @Override
+    public Classroom GetById(String ClassroomId) {
+<span class="nc" id="L131">        return classroomRepository.findById(ClassroomId).get();</span>
+    }
+
+    @Override
+    public void DeleteClassroomById(String ClassroomId) {
+<span class="nc" id="L136">        classroomRepository.deleteById(ClassroomId);</span>
+<span class="nc" id="L137">    }</span>
+
+    @Override
+    public void deleteTeacherFromClassroom(String teacherId, String classroomId) {
+<span class="nc" id="L141">        Optional&lt;Classroom&gt; classroomOptional = classroomRepository.findById(classroomId);</span>
+<span class="nc" id="L142">        Optional&lt;User&gt; teacherOptional = userRepository.findById(teacherId);</span>
+
+<span class="nc bnc" id="L144" title="All 4 branches missed.">        if (classroomOptional.isPresent() &amp;&amp; teacherOptional.isPresent()) {</span>
+<span class="nc" id="L145">            Classroom classroom = classroomOptional.get();</span>
+<span class="nc" id="L146">            User teacher = teacherOptional.get();</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if (classroom.getTeachers().contains(teacher)) {</span>
+<span class="nc" id="L149">                classroom.getTeachers().remove(teacher);</span>
+<span class="nc" id="L150">                classroomRepository.save(classroom);</span>
+            }
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (teacher.getClassrooms().contains(classroom)) {</span>
+<span class="nc" id="L154">                teacher.getClassrooms().remove(classroom);</span>
+<span class="nc" id="L155">                userRepository.save(teacher);</span>
+            }
+        } else {
+            // Handle the case where either the teacher or classroom doesn't exist
+            // This could be logging an error, throwing a custom exception, etc.
+        }
+<span class="nc" id="L161">    }</span>
+
+    @Override
+    public List&lt;Classroom&gt; GetClassroomsByTeacher(String IdTeacher) {
+<span class="nc" id="L165">        User teacher = userRepository.findById(IdTeacher).get();</span>
+<span class="nc" id="L166">        return classroomRepository.getClassroomByTeachersContains(teacher);</span>
+    }
+
+    @Override
+    public List&lt;Classroom&gt; GetClassroomsByStudent(String IdStudent) {
+<span class="nc" id="L171">        User student = userRepository.findById(IdStudent).get();</span>
+<span class="nc" id="L172">        return classroomRepository.getClassroomByStudnetsContains(student)  ;</span>
+    }
+
+    @Override
+    public void AddTeacherToClass(String IdTeacher, String IdClassroom) {
+
+<span class="nc" id="L178">            Classroom c = classroomRepository.findById(IdClassroom).get();</span>
+<span class="nc" id="L179">            User u = userRepository.findById(IdTeacher).get();</span>
+<span class="nc" id="L180">            System.out.println(u.getLogin());</span>
+<span class="nc" id="L181">            u.getClassrooms().add(c);</span>
+<span class="nc" id="L182">            userRepository.save(u);</span>
+<span class="nc" id="L183">            c.getTeachers().add(u);</span>
+<span class="nc" id="L184">            classroomRepository.save(c);</span>
+
+
+
+<span class="nc" id="L188">    }</span>
+
+    @Override
+    public void AddStudentToClass(String idStudent, String IdClassroom) {
+<span class="nc" id="L192">        Classroom c = classroomRepository.findById(IdClassroom).get();</span>
+<span class="nc" id="L193">        User u = userRepository.findById(idStudent).get();</span>
+<span class="nc" id="L194">        System.out.println(u.getLogin());</span>
+<span class="nc" id="L195">        u.getClassrooms().add(c);</span>
+<span class="nc" id="L196">        userRepository.save(u);</span>
+<span class="nc" id="L197">        c.getStudnets().add(u);</span>
+<span class="nc" id="L198">        classroomRepository.save(c);</span>
+<span class="nc" id="L199">    }</span>
+
+    @Override
+    public void AddCourseToClassroom(String IdClassroom, String CourseesID) {
+<span class="nc" id="L203">        Classroom c = classroomRepository.findById(IdClassroom).get();</span>
+<span class="nc" id="L204">        Course course = courseRepository.findById(CourseesID).get();</span>
+<span class="nc" id="L205">        c.getCourses().add(course) ;</span>
+<span class="nc" id="L206">        course.getClassrooms().add(c);</span>
+<span class="nc" id="L207">        classroomRepository.save(c);</span>
+<span class="nc" id="L208">        courseRepository.save(course);</span>
+
+
+<span class="nc" id="L211">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
