@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir("backendPidev") {
                     withSonarQubeEnv('courzello') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=courzello -Dsonar.projectName='courzello' -Dsonar.host.url=http://192.168.152.130:9000 -Dsonar.token=sqp_73d71fa53703b79f59a4d13219bc994d37b802d6 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
+                        sh "mvn sonar:sonar -Dsonar.projectKey=courzello -Dsonar.projectName='courzello' -Dsonar.host.url=http://192.168.152.130:9000 -Dsonar.token=sqp_73d71fa53703b79f59a4d13219bc994d37b802d6 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
                     }
                 }
             }
