@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t seifafi/courzelo:latest .'
+                    sh 'docker build -t seifafi/courzelo .'
                 }
             }
         }
