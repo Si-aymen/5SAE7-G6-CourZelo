@@ -24,7 +24,7 @@ pipeline {
                 dir('backendPidev') {
                     script {
                         try {
-                            sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                            sh 'mvn deploy'
                         } catch (Exception e) {
                             error "Deployment failed: ${e}"
                         }
