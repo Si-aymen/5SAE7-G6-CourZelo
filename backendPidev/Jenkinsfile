@@ -20,7 +20,9 @@ pipeline {
                 // Configurer le buffer HTTP de Git avant le clonage
                 sh 'git config --global http.postBuffer 524288000'
                 // Clonage du dépôt Git depuis la branche nourchaine
-                git branch: 'nourchaine', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+               // git branch: 'nourchaine', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+                sh 'git clone --depth 1 -b nourchaine https://github.com/Si-aymen/Courzelo-Devops.git .'
+
             }
         }
 
