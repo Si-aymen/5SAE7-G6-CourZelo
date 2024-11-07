@@ -19,6 +19,19 @@ pipeline {
                 }
             }
         }
+
+         stage('JUnit Tests') {
+                    steps {
+                        dir("$BASE_DIR") {
+                            sh 'mvn test'
+                        }
+                    }
+                    post {
+                        always {
+                            junit '**/target/surefire-reports/*.xml' // Path for JUnit test reports
+                        }
+                    }
+                }
         
         stage('SonarQube Analysis') {
     steps {
