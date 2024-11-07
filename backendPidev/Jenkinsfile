@@ -9,6 +9,13 @@ pipeline {
                 checkout scm
             }
         }
+        stage('GIT') {
+            steps {
+                git branch: 'Alaa',
+                    url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+            }
+        }
+
         stage('Build') {
             steps {
                 dir('backendPidev') {
