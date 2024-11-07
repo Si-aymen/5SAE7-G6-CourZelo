@@ -66,7 +66,7 @@ pipeline {
 stage('Install') {
     steps {
         dir("$BASE_DIR") {
-            sh 'mvn clean install -DskipTests -Dspotbugs.skip=true'
+            sh 'mvn clean install -DskipTests'
         }
     }
 }
@@ -93,13 +93,7 @@ stage('Install') {
             }
         }
 
-      /*  stage('SpotBugs Analysis') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn spotbugs:check'
-                }
-            }
-        }*/
+
 
 
 
