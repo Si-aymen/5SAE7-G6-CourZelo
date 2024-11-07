@@ -84,6 +84,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Docker Compose') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'docker-compose up -d'
+                        } catch (Exception e) {
+                            error "Docker Compose up failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
+
+        
     }
     post {
         always {
