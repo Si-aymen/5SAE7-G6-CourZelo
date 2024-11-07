@@ -1,8 +1,30 @@
-version: '3'
+version: '3.8'
+
 services:
-  echo-server:
-    image: aelen/echo-server:latest
+  backend-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      - ENABLE_ENVIRONMENT=false
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/courzello
+      SPRING_MAIL_USERNAME: rezigui.alaa@gmail.com
+      SPRING_MAIL_PASSWORD: npfomqcczwdlnpxt
     ports:
-      - 3000:80
+      - "8090:8090"
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: courzello
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
