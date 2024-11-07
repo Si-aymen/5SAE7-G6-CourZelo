@@ -209,9 +209,9 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.5.0.0</version>
                 <configuration>
-                    <effort>Max</effort>
-                    <threshold>High</threshold> <!-- Set to ignore lower severity issues -->
+                    <excludeFilterFile>src/main/resources/excludeFilter.xml</excludeFilterFile>
                 </configuration>
+
             </plugin>
 
 
