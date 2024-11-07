@@ -3,7 +3,7 @@ version: '3.8'
 services:
   prometheus:
     image: prom/prometheus
-    container_name: prometheus_new
+    container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
@@ -13,7 +13,7 @@ services:
 
   grafana:
     image: grafana/grafana
-    container_name: grafana_new
+    container_name: grafana
     ports:
       - "3000:3000"
     environment:
@@ -22,11 +22,17 @@ services:
       - monitoring
     depends_on:
       - prometheus
-  docker-exporter:
-    image: prom/docker-exporter
+
+  # Corrected exporter service
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter_new
     ports:
-      - "9104:9104"
+      - "9100:9100"
     restart: unless-stopped
+    networks:
+      - monitoring
+
 networks:
   monitoring:
     driver: bridge
