@@ -15,8 +15,8 @@ pipeline {
             steps {
                 retry(3) { // Retry up to 3 times in case of failure
                     checkout([$class: 'GitSCM',
-                              branches: [[name: 'refs/heads/AymenRahali-5SAE7-G4']],
-                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']],
+                              branches: [[name: 'refs/heads/AymenRahali-5SAE7-G6']],
+                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git']],
                               extensions: [
                                   [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
                                   [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
