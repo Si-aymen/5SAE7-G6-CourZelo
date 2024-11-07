@@ -57,7 +57,7 @@ pipeline {
             steps {
                 dir('backendPidev') {
                     script {
-                        sh 'docker build -t reziguialaa/your-image-name:latest .'
+                        sh 'docker build -t reziguialaa/courzelo:latest .'
                     }
                 }
             }
