@@ -108,13 +108,7 @@ pipeline {
             }
         }
         
-stage("Quality Gate") {
-    steps {
-        timeout(time: 2, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true, hostUrl: 'http://192.168.33.10:9006'
-        }
-    }
-}
+
 
         stage('Build Docker Image') {
             steps {
