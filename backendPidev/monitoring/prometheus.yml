@@ -8,4 +8,8 @@ scrape_configs:
 
   - job_name: 'docker'
     static_configs:
-      - targets: ['docker-exporter:9104'] # Add Docker exporter if needed
+      - targets: ['docker-exporter:9104']
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']

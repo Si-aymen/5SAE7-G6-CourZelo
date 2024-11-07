@@ -23,7 +23,6 @@ services:
     depends_on:
       - prometheus
 
-  # Corrected exporter service
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter_new
@@ -32,6 +31,17 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+
+  docker-exporter:
+    image: prom/docker-exporter
+    container_name: docker-exporter_new
+    ports:
+      - "9104:9104"
+    restart: unless-stopped
+    networks:
+      - monitoring
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   monitoring:
