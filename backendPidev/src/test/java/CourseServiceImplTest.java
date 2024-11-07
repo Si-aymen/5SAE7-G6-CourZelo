@@ -58,7 +58,7 @@ class CourseControllerTest {
         when(courseService.getALLCourses()).thenReturn(courses);
 
         // Effectuer la requête et vérifier les résultats
-        mockMvc.perform(get("/courses/GetAllCourses")
+        mockMvc.perform(get("/courses/retrieve-courses")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())  // Vérifier que la réponse est OK
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))  // Vérifier le type MIME
