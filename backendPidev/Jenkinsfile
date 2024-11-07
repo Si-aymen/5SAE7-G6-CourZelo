@@ -2,6 +2,9 @@ pipeline {
     agent any
     environment {
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials') 
+        EMAIL_RECIPIENT = 'rezigui.alaa@gmail.com'
+
+
     }
     stages {
         stage('Checkout') {
@@ -112,6 +115,16 @@ pipeline {
         always {
             echo 'Pipeline finished.'
             junit 'backendPidev/target/surefire-reports/*.xml'
+
+            emailext(
+                subject: "Jenkins Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                body: """<p>Build ${env.BUILD_NUMBER} finished with status: ${currentBuild.currentResult}</p>
+                         <p>Project: ${env.JOB_NAME}</p>
+                         <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>""",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                to: 'rezigui.alaa@gmail.com',
+                mimeType: 'text/html'
+            )
         }
         failure {
             echo 'Pipeline failed. Please check the logs for details.'
