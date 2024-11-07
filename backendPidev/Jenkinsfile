@@ -11,7 +11,7 @@ pipeline {
         }
         stage('GIT') {
             steps {
-                git branch: 'Alaa',
+                git branch: 'alaa',
                     url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
             }
         }
