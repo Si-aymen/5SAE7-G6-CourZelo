@@ -40,26 +40,7 @@ pipeline {
         }
     }
 }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo 'Building Docker Image'
-                    sh 'docker build -t seif2066/devops-integration:latest --build-arg JAR_FILE=target/devops-integration.jar  -f backendPidev/Dockerfile backendPidev'
-                }
-            }
-        }
-
-       stage('Deploy Image to DockerHub') {
-           steps {
-               script {
-               withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                       sh 'docker login -u seif2066 -p ${dockerhubpwd}'
-                       sh 'docker push seif2066/devops-integration'
-                   }
-               }
-           }
-        }
-
+       
 
         stage('Deploy to Nexus') {
             steps {
