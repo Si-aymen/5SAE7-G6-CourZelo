@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-                stage('SonarQube') {
+        stage('SonarQube') {
             steps {
                 dir("backendPidev") {
                     withSonarQubeEnv('courzello') {
@@ -28,7 +28,28 @@ pipeline {
                 }
             }
         }
-
+        stage('Test') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn test'
+                        } catch (Exception e) {
+                            error "Tests failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Generate Report') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        sh 'mvn surefire-report:report'
+                    }
+                }
+            }
+        }
         stage('Deploy to Nexus') {
             steps {
                 dir('backendPidev') {
@@ -46,6 +67,7 @@ pipeline {
     post {
         always {
             echo 'Pipeline finished.'
+            junit 'backendPidev/target/surefire-reports/*.xml'
         }
         failure {
             echo 'Pipeline failed. Please check the logs for details.'
