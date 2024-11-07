@@ -1,10 +1,10 @@
 package test;
-import test.Exception.EntityNotFoundException;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+import com.pidev.backend.Exception.EntityNotFoundException;
 import com.pidev.backend.Entity.Course;
 import com.pidev.backend.Repository.CourseRepository;
 import com.pidev.backend.ServiceImpl.CourseServiceImpl;
