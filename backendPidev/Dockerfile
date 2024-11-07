@@ -1,4 +1,4 @@
-FROM openjdk:17-jre-slim
+FROM openjdk:17-alpine
 ARG JAR_FILE=target/app.jar
 WORKDIR /app
 COPY ${JAR_FILE} app.jar
