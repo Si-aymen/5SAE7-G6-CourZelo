@@ -11,7 +11,7 @@ pipeline {
         }
         stage('GIT') {
             steps {
-                git branch: 'alaa',
+                git branch: 'AlaaRezigui-5SAE7-G6',
                     url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
         }
