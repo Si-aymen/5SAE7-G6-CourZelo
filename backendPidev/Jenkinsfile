@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t seif2066/courzelo .  -f backendPidev/Dockerfile backendPidev'
+                    sh 'docker build -t seif2066/devops-integration .  -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
