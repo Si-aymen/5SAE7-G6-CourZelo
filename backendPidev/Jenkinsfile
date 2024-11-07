@@ -33,7 +33,82 @@ pipeline {
             }
         }
     
+    stage('SonarQube') {
+            steps {
+                dir("backendPidev") {
+                    withSonarQubeEnv('courzello') {
+                        sh "mvn sonar:sonar -Dsonar.projectKey=courzello -Dsonar.projectName='courzello' -Dsonar.host.url=http://192.168.152.130:9000 -Dsonar.token=sqp_73d71fa53703b79f59a4d13219bc994d37b802d6 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
+                    }
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn test'
+                        } catch (Exception e) {
+                            error "Tests failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Generate Report') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        sh 'mvn surefire-report:report'
+                    }
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        sh 'docker build -t reziguialaa/courzelo:latest .'
+                    }
+                }
+            }
+        }
+        stage('Deploy Docker Image to Docker Hub') {
+            steps {
+                script {
+                    sh "echo ${DOCKER_CREDENTIALS_PSW} | docker login -u ${DOCKER_CREDENTIALS_USR} --password-stdin"
 
+                    sh 'docker push reziguialaa/courzelo:latest'
+                }
+            }
+        }
+        stage('Deploy to Nexus') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn deploy'
+                        } catch (Exception e) {
+                            error "Deployment failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'docker-compose up -d'
+                        } catch (Exception e) {
+                            error "Docker Compose up failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
 
     }
     post {
