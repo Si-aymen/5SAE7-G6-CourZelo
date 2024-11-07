@@ -93,7 +93,13 @@ pipeline {
             mail to: 'nourchaine.sahli@gmail.com',
                  subject: "Succès du build: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                  body: "Le build a réussi pour ${env.JOB_NAME} - ${env.BUILD_NUMBER}. Consultez les détails ici : ${env.BUILD_URL}"
-            echo "Pipeline completed successfully Sending Email ."
+            echo "Pipeline completed successfully Sending Email ." 
+            
+             jacoco(
+                execPattern: '**/build/jacoco/*.exec',
+                classPattern: '**/build/classes/java/main',
+                sourcePattern: '**/src/main'
+            )
         }
         failure {
             mail to: 'nourchaine.sahli@gmail.com',
