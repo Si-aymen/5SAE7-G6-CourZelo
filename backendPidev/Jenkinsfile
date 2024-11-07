@@ -125,7 +125,7 @@ pipeline {
                 dir('backendPidev') {
                     script {
                         try {
-                            sh 'docker-compose -f backendPidev/docker-compose.yml up -d'
+                            sh 'docker compose -f backendPidev/docker-compose.yml up -d'
                         } catch (Exception e) {
                             error "Docker Compose up failed: ${e}"
                         }
