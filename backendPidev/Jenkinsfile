@@ -55,6 +55,16 @@ pipeline {
             }
         }
         
+         stage('JUnit/Mockito') {
+            steps {
+                script {
+                    sh "mvn clean install -DskipTests"
+                    sh "mvn test"
+                    junit '**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+        
          stage('Generate Report') {
             steps {
                 dir('backendPidev') {
