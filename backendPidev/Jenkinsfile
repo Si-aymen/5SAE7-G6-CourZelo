@@ -58,17 +58,10 @@ pipeline {
         stage('JUnit/Mockito') {
     steps {
         script {
-            // Vérifie que tu es bien dans le répertoire racine du projet où se trouve pom.xml
-            dir('.') { // Répertoire racine où se trouve le pom.xml
-                // Exécute clean et install sans les tests
-              //  sh 'mvn clean install -DskipTests'
-                
-                // Exécute les tests
-                sh 'mvn test'
-                
-                // Vérifie les rapports générés par Surefire pour les tests JUnit
-                junit '**/target/surefire-reports/*.xml'
-            }
+            // Utilisation de Maven installé globalement
+            sh 'mvn clean install -DskipTests'
+            sh 'mvn test'
+            junit '**/target/surefire-reports/*.xml'
         }
     }
 }
