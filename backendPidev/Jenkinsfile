@@ -92,13 +92,15 @@ pipeline {
             }
         }
 
-        stage('Static Code Analysis with Checkstyle') {
+        stage('SpotBugs Analysis') {
             steps {
                 dir("$BASE_DIR") {
-                    sh 'mvn checkstyle:check'
+                    sh 'mvn spotbugs:check'
                 }
             }
         }
+
+
 
 
 
