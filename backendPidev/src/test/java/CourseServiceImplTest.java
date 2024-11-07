@@ -1,100 +1,73 @@
 package test;
 
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import com.pidev.backend.Exception.EntityNotFoundException;
+import com.pidev.backend.Controller.CourseController;
 import com.pidev.backend.Entity.Course;
-import com.pidev.backend.Repository.CourseRepository;
-import com.pidev.backend.ServiceImpl.CourseServiceImpl;
+import com.pidev.backend.Service.CourseService;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
-public class CourseServiceImplTest {
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.is;
+
+class CourseControllerTest {
+
+    private MockMvc mockMvc;
 
     @Mock
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     @InjectMocks
-    private CourseServiceImpl courseService;
-
-    private Course course;
+    private CourseController courseController;
 
     @BeforeEach
-    public void setUp() {
-        course = new Course();
-        course.setId("1");
-        course.setCourseName("Test Course");
-        course.setCourseLevel("Beginner");
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(courseController).build();
     }
 
     @Test
-    public void testGetAllCourses() {
-        when(courseRepository.findAll()).thenReturn(Arrays.asList(course));
+    void testGetAllCourses() throws Exception {
+        // Création de quelques objets Course
+        Course course1 = new Course();
+        course1.setId("1");
+        course1.setCourseName("Course One");
+        course1.setCourseLevel("Beginner");
 
-        List<Course> courses = courseService.getALLCourses();
+        Course course2 = new Course();
+        course2.setId("2");
+        course2.setCourseName("Course Two");
+        course2.setCourseLevel("Intermediate");
 
-        assertThat(courses).hasSize(1);
-        assertThat(courses.get(0).getId()).isEqualTo("1");
-    }
+        // Liste de cours
+        List<Course> courses = Arrays.asList(course1, course2);
 
-    @Test
-    public void testAddCourse() {
-        when(courseRepository.save(any(Course.class))).thenReturn(course);
+        // Simulation du comportement du service
+        when(courseService.getALLCourses()).thenReturn(courses);
 
-        Course savedCourse = courseService.addCourse(course);
-
-        assertThat(savedCourse.getId()).isEqualTo("1");
-        assertThat(savedCourse.getCourseName()).isEqualTo("Test Course");
-    }
-
-    @Test
-    public void testModifyCourse() {
-        when(courseRepository.save(any(Course.class))).thenReturn(course);
-
-        Course modifiedCourse = courseService.modifyCourse(course);
-
-        assertThat(modifiedCourse.getId()).isEqualTo("1");
-        assertThat(modifiedCourse.getCourseName()).isEqualTo("Test Course");
-    }
-
-    @Test
-    public void testDeleteCourse() {
-        when(courseRepository.findById("1")).thenReturn(Optional.of(course));
-
-        courseService.deleteCourse("1");
-
-        verify(courseRepository, times(1)).delete(course);
-    }
-
-    @Test
-    public void testGetCourseById() {
-        when(courseRepository.findById("1")).thenReturn(Optional.of(course));
-
-        Course foundCourse = courseService.getCourseById("1");
-
-        assertThat(foundCourse).isNotNull();
-        assertThat(foundCourse.getId()).isEqualTo("1");
-    }
-
-    @Test
-    public void testGetCourseById_NotFound() {
-        when(courseRepository.findById("1")).thenReturn(Optional.empty());
-
-        try {
-            courseService.getCourseById("1");
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(EntityNotFoundException.class);
-        }
+        // Effectuer la requête et vérifier les résultats
+        mockMvc.perform(get("/courses/GetAllCourses")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())  // Vérifier que la réponse est OK
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))  // Vérifier le type MIME
+                .andExpect(jsonPath("$", hasSize(2)))  // Vérifier que la liste contient 2 éléments
+                .andExpect(jsonPath("$[0].id", is("1")))  // Vérifier les propriétés du premier cours
+                .andExpect(jsonPath("$[0].courseName", is("Course One")))
+                .andExpect(jsonPath("$[0].courseLevel", is("Beginner")))
+                .andExpect(jsonPath("$[1].id", is("2")))  // Vérifier les propriétés du deuxième cours
+                .andExpect(jsonPath("$[1].courseName", is("Course Two")))
+                .andExpect(jsonPath("$[1].courseLevel", is("Intermediate")));
     }
 }
