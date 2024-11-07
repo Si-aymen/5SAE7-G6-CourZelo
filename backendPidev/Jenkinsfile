@@ -38,12 +38,32 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
+            /* steps {
                 // Exécution des tests Maven
                 sh 'mvn -f backendPidev/pom.xml test'
+            } */ 
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn test'
+                        } catch (Exception e) {
+                            error "Tests failed: ${e}"
+                        }
+                    }
+                }
             }
         }
         
+         stage('Generate Report') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        sh 'mvn surefire-report:report'
+                    }
+                }
+            }
+        }
          stage('JaCoCo Report') {
             steps {
                 script {
@@ -96,6 +116,20 @@ pipeline {
                 script {
                     echo 'Pushing Docker Image to Docker Hub'
                     sh 'docker push nourchaine/devops:latest'
+                }
+            }
+        } 
+        
+        stage('Run Docker Compose') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'docker-compose up -d'
+                        } catch (Exception e) {
+                            error "Docker Compose up failed: ${e}"
+                        }
+                    }
                 }
             }
         }
