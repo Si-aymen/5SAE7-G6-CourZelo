@@ -92,6 +92,16 @@ pipeline {
             }
         }
 
+        stage('Static Code Analysis with Checkstyle') {
+            steps {
+                dir("$BASE_DIR") {
+                    sh 'mvn checkstyle:check'
+                }
+            }
+        }
+
+
+
         stage('SonarQube Analysis') {
             steps {
                 dir("$BASE_DIR") {
