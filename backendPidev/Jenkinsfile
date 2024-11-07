@@ -60,6 +60,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Nexus') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn deploy'
+                        } catch (Exception e) {
+                            error "Deployment failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
+
+
         stage('Build Docker Image') {
             steps {
                 dir('backendPidev') {
@@ -78,19 +94,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Nexus') {
-            steps {
-                dir('backendPidev') {
-                    script {
-                        try {
-                            sh 'mvn deploy'
-                        } catch (Exception e) {
-                            error "Deployment failed: ${e}"
-                        }
-                    }
-                }
-            }
-        }
+
 
         stage('Run Docker Compose') {
             steps {
