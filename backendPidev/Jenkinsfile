@@ -41,7 +41,7 @@ pipeline {
                script {
                withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                        sh 'docker login -u seif2066 -p ${dockerhubpwd}'
-                       sh 'docker push seifafi/courzelo:latest'
+                       sh 'docker push seif2066/devops-integration'
                    }
                }
            }
