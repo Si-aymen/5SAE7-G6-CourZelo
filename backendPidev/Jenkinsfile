@@ -114,7 +114,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t aymenrahali/courzelo:latest --build-arg JAR_FILE=target/app.jar -f backendPidev/Dockerfile backendPidev'
+                    sh 'docker build -t aymenrahali/aymenrahali-5sae7-g6-courzelo:latest --build-arg JAR_FILE=target/app.jar -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
@@ -124,12 +124,12 @@ pipeline {
                 script {
                     echo 'Logging into DockerHub and Pushing Image'
                     sh 'docker login -u aymenrahali -p Omen15@6631'
-                    sh 'docker push aymenrahali/courzelo:latest'
+                    sh 'docker push aymenrahali/aymenrahali-5sae7-g6-courzelo:latest'
                 }
             }
         }
 
-        stage('Run Docker Compose') {
+     /*   stage('Run Docker Compose') {
             steps {
                 dir('backendPidev') {
                     script {
@@ -142,6 +142,7 @@ pipeline {
                 }
             }
         }
+        */
 
 
 
