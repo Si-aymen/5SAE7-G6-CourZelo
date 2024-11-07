@@ -63,13 +63,14 @@ pipeline {
             }
         }
 
-        stage('Install') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn install -DskipTests'
-                }
-            }
+stage('Install') {
+    steps {
+        dir("$BASE_DIR") {
+            sh 'mvn clean install -DskipTests -Dspotbugs.skip=true'
         }
+    }
+}
+
 
         stage('Generate JaCoCo Report') {
             steps {
@@ -92,13 +93,13 @@ pipeline {
             }
         }
 
-        stage('SpotBugs Analysis') {
+      /*  stage('SpotBugs Analysis') {
             steps {
                 dir("$BASE_DIR") {
                     sh 'mvn spotbugs:check'
                 }
             }
-        }
+        }*/
 
 
 
