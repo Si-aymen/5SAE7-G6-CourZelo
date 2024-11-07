@@ -18,9 +18,8 @@ public class VoteServiceImpl implements IVoteService {
     VoteRepository voterepo;
     @Autowired
     QuestionRepository questionrepo;
-    @Override
     public Vote ajoutdeletevote(Vote v, String idu, String idq) {
-        Question question = questionrepo.findById(idq).orElse(null);
+       /* Question question = questionrepo.findById(idq).orElse(null);
         User user = userrepo.findById(idu).orElse(null);
         if (user != null && question != null) {
             Vote vote = voterepo.findByQuestionAndUser(idq, idu);
@@ -83,7 +82,8 @@ public class VoteServiceImpl implements IVoteService {
 
         }
         return v;
-
+*/
+        return null;
     }
 
 
