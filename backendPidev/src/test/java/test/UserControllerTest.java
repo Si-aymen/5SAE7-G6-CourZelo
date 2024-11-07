@@ -42,7 +42,6 @@ class UserControllerTest {
 
     @Test
     void testGetAllUsers() throws Exception {
-        // Arrange: Set up mock users
         User user1 = new User();
         user1.setLogin("user1");
         user1.setFirstName("User One");
@@ -53,10 +52,8 @@ class UserControllerTest {
 
         List<User> users = Arrays.asList(user1, user2);
 
-        // Set up the mocked service to return this list of users
         when(userService.getAllUsers()).thenReturn(users);
 
-        // Act & Assert: Perform GET request and verify the response
         mockMvc.perform(get("/users/GetAllUsers")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
