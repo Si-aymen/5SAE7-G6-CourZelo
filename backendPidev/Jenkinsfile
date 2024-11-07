@@ -12,7 +12,7 @@ pipeline {
     stages {
       stage('Checkout') {
           steps {
-              checkout([$class: 'GitSCM', branches: [[name: '*/yosra']], userRemoteConfigs: [[url: 'https://github.com/Si-aymen/Courzelo-Devops.git']], shallow: true])
+              checkout([$class: 'GitSCM', branches: [[name: '*/YosraOUESLATI-5SAE7-G6']], userRemoteConfigs: [[url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git']], shallow: true])
           }
       }
 
@@ -42,7 +42,7 @@ pipeline {
                       script {
                           echo 'Building Docker Image'
                           // Make sure to specify the correct Dockerfile path
-                          sh ' docker build -t yosra2001/devops:1.0.0 -f backendPidev/Dockerfile backendPidev'
+                          sh ' docker build -t yosra2001/yosraoueslati-5sae7-g6-courzelo:1.0.0 -f backendPidev/Dockerfile backendPidev'
                       }
                   }
               }
@@ -53,7 +53,7 @@ pipeline {
                               script {
                                   echo 'Logging into DockerHub and Pushing Image'
                                   sh 'docker login -u yosra2001 -p machine*learning'
-                                  sh 'docker push yosra2001/devops:1.0.0'
+                                  sh 'docker push yosra2001/yosraoueslati-5sae7-g6-courzelo:1.0.0'
                               }
                           }
                       }
