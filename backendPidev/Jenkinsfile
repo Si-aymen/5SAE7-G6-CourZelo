@@ -14,7 +14,7 @@ pipeline {
     }
 
     stages {
-         
+         stage('Checkout') {
          steps {
                 retry(3) { // Retry up to 3 times in case of failure
                     checkout([$class: 'GitSCM',
@@ -27,6 +27,7 @@ pipeline {
                     ])
                 }
             }
+         }
             
             
      //   git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
