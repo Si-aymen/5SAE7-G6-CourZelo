@@ -15,7 +15,7 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: "mongodb"
+    container_name: "mongodbb"
     ports:
       - 27070:27017
     networks:
