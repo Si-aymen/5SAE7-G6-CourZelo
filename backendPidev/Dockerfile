@@ -1,6 +1,3 @@
 FROM openjdk:17-jdk-slim
-ARG JAR_FILE=target/backend-0.0.1.jar
-WORKDIR /app
-COPY ${JAR_FILE} app.jar
-EXPOSE 8090
+ADD target/sb-app.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
