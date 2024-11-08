@@ -114,7 +114,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t nourchaine/devops:latest -f backendPidev/Dockerfile .'
+                    sh 'docker build -t nourchaine/sahli-5SAE7-G6:latest -f backendPidev/Dockerfile .'
                 }
             }
         }
