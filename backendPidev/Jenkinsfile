@@ -17,7 +17,16 @@ pipeline {
          
         stage('Checkout') {
             steps {
-                // Configurer le buffer HTTP de Git avant le clonage
+       
+                
+                checkout scm
+            
+     //   git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
+            }
+        }
+         stage('GIT') {
+            steps {
+                         // Configurer le buffer HTTP de Git avant le clonage
                 sh 'git config --global http.postBuffer 1048576000'
 
                 // Clonage du dépôt Git depuis la branche nourchaine
@@ -26,7 +35,8 @@ pipeline {
         sh 'git config --global core.compression 9'
         sh 'git config --global http.lowSpeedLimit 1024'
         sh 'git config --global http.lowSpeedTime 60'
-        git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
+                git branch: 'nourchainesahli-5SAE7-G6',
+                    url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
         }
 
