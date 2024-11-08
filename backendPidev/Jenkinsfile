@@ -1,186 +1,103 @@
 pipeline {
-    agent any
+    agent any 
 
-    tools {
-        maven 'M2_HOME'
-    }
 
-    environment {
-        BASE_DIR = 'backendPidev'
-        EMAIL_RECIPIENT = 'aymen.rahali@esprit.tn'
-    }
-
-    stages {
-        stage('Checkout') {
+    stages { 
+       
+         stage('verif code source from Git') {
             steps {
-                retry(3) { // Retry up to 3 times in case of failure
-                    checkout([$class: 'GitSCM',
-                              branches: [[name: 'refs/heads/AymenRahali-5SAE7-G6']],
-                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git']],
-                              extensions: [
-                                  [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
-                                  [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
-                              ]
-                    ])
-                }
+                
+                     git branch: 'omnia', credentialsId: 'cre-git', url: 'https://github.com/Si-aymen/Courzello.git'
+                
+                
             }
         }
-
-        stage('Clean-Compile') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn clean compile'
-                }
-            }
-        }
-
-        stage('Test-Compile') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn test-compile'
-                }
-            }
-        }
-
-        stage('JUnit Tests') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn test'
-                }
-            }
-            post {
-                always {
-                    junit '**/target/surefire-reports/*.xml' // Path for JUnit test reports
-                }
-            }
-        }
-
-        stage('Package') {
-            steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn package -DskipTests'
-                }
-            }
-        }
-
-stage('Install') {
-    steps {
-        dir("$BASE_DIR") {
-            sh 'mvn clean install -DskipTests'
-        }
-    }
-}
-
-
-        stage('Generate JaCoCo Report') {
-            steps {
-                echo 'Generating JaCoCo Report'
-                dir("$BASE_DIR") {
-                    sh 'mvn jacoco:report'
-                }
-            }
-        }
-
-        stage('JaCoCo Coverage Report') {
-            steps {
-                echo 'Publishing JaCoCo Coverage Report'
-                step([$class: 'JacocoPublisher',
-                      execPattern: '**/target/jacoco.exec',
-                      classPattern: '**/target/classes/**/*.class',
-                      sourcePattern: '**/src/main/java/**/*.java',
-                      exclusionPattern: '**/target/**,**/*Test*,**/_javassist/**'
-                ])
-            }
-        }
-
-
-
-
-
-
-
-        stage('SonarQube Analysis') {
-            steps {
-                dir("$BASE_DIR") {
-                    withSonarQubeEnv('NewcourZelo') {
-                        sh '''
-                            mvn sonar:sonar \
-                              -Dsonar.projectKey=NewcourZelo \
-                              -Dsonar.projectName=NewcourZelo \
-                              -Dsonar.host.url=http://192.168.33.10:9006 \
-                              -Dsonar.token=sqp_8037d660cceccd9d73d9bf8db0517d7ad99c016b
-                        '''
-                    }
-                }
-            }
-        }
-        
-
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo 'Building Docker Image'
-                    sh 'docker build -t aymenrahali/aymenrahali-5sae7-g6-courzelo:latest --build-arg JAR_FILE=target/app.jar -f backendPidev/Dockerfile backendPidev'
-                }
-            }
-        }
-
-        stage('Deploy Image to DockerHub') {
-            steps {
-                script {
-                    echo 'Logging into DockerHub and Pushing Image'
-                    sh 'docker login -u aymenrahali -p Omen15@6631'
-                    sh 'docker push aymenrahali/aymenrahali-5sae7-g6-courzelo:latest'
-                }
-            }
-        }
-
-     /*   stage('Run Docker Compose') {
+           stage('Build') {
             steps {
                 dir('backendPidev') {
-                    script {
-                        try {
-                            sh 'docker-compose up -d'
-                        } catch (Exception e) {
-                            error "Docker Compose up failed: ${e}"
-                        }
-                    }
+                 sh "mvn clean install"   
+            
                 }
+                
             }
         }
-        */
-
-
-
-
-        stage ('Nexus') {
+                stage('Test JUnit/Mockito') {
             steps {
-                dir("$BASE_DIR") {
-                    sh 'mvn deploy'
+                dir('backendPidev') {
+               
+               sh "mvn test"
+             
+                }
+            }
+            
+        }
+        stage('SonarQube Scanner') {
+            steps {
+                dir('backendPidev') {
+                // Use the specified Maven installation
+            withSonarQubeEnv('sonarqube') {
+                 script{
+                  
+                    sh "mvn sonar:sonar"
+                 }
+
+
+                }
+            }
+        }}
+
+ stage('nexus') {
+            steps {
+                dir('backendPidev') {
+               
+               sh "mvn deploy"
+             
+                }
+            }
+            
+        }
+    stage('Build Docker Image ') {
+            steps {
+                dir('backendPidev') {
+                script {
+                    sh 'docker build -t omnia462/courzello .'
                 }
             }
         }
-    }
-
-    post {
-        success {
-            mail to: "${env.EMAIL_RECIPIENT}",
-                 subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
-                 body: """Pipeline Jenkins
-                 Final Report: The pipeline has completed successfully.
-                 Build number: ${BUILD_NUMBER}. No action required."""
+         }
+          stage('Deploy Docker Image') {
+            steps {
+                script {
+                 withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                    sh 'docker login -u omnia462 -p ${dockerhubpwd}'
+                 }  
+                 sh 'docker push omnia462/courzello'
+                }
+            }
         }
-        failure {
-            mail to: "${env.EMAIL_RECIPIENT}",
-                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
-                 body: """Pipeline Jenkins
-                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
-                 Please check the logs and take necessary actions."""
+        stage('Deploy with Docker Compose') {
+            steps {
+                 dir('backendPidev') {
+                sh 'docker-compose up -d'
+            }}
         }
-        always {
-            echo 'Pipeline completed.'
-            //cleanWs(deleteDirs: true, disableDeferredWipeout: true) // Clean workspace after each run
+  /*  stage('Build Docker Image front') {
+            steps {
+                dir('Angular frontOffice') {
+                script {
+                    sh 'docker build -t omnia462/courzellofront .'
+                }
+            }
         }
-    }
-}
+         }
+          stage('Deploy Docker Image front') {
+            steps {
+                script {
+                 withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                    sh 'docker login -u omnia462 -p ${dockerhubpwd}'
+                 }  
+                 sh 'docker push omnia462/courzellofront'
+                }
+            }
+        }*/
+    }}
