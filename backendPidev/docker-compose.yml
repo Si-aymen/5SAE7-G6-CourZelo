@@ -17,7 +17,7 @@ services:
       - app-network
 
   mongo:
-    image: mongo:latest
+    image: seif2066/devops-integration:latest
     environment:
       MONGO_INITDB_DATABASE: courzello
     ports:
