@@ -39,13 +39,7 @@ pipeline {
             }
         }
 
-         stage('SonarQube Analysis') {
-            steps {
-                dir('backendPidev') {
-                    sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true'
-                }
-            }
-        }
+
         stage('jUnitTest') {
             steps {
                 dir('backendPidev') {
@@ -59,6 +53,14 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+                    steps {
+                        dir('backendPidev') {
+                            sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true'
+                        }
+                    }
+                }
 
        stage('Deploy to Nexus') {
                    steps {
