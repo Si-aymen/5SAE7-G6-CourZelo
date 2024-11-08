@@ -102,8 +102,8 @@ pipeline {
                 dir('backendPidev') {
                     script {
                         try {
-                            sh 'docker-compose down'
-                            sh 'docker-compose up --build -d '
+                            sh 'docker compose down'
+                            sh 'docker compose up --build -d '
                         } catch (Exception e) {
                             error "Docker Compose up failed: ${e}"
                         }
