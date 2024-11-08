@@ -1,5 +1,12 @@
 pipeline {
     agent any
+
+     environment {
+            EMAIL_RECIPIENT = 'rezigui.alaa@gmail.com'
+
+
+        }
+
     stages {
         stage('Checkout') {
             steps {
@@ -89,8 +96,29 @@ stage('Run Docker Compose') {
         always {
             echo 'Pipeline finished.'
         }
-        failure {
-            echo 'Pipeline failed. Please check the logs for details.'
-        }
-    }
+       success {
+                   mail to: "${env.EMAIL_RECIPIENT}",
+                        subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
+                        body: """Pipeline Jenkins
+                        Final Report: The pipeline has completed successfully.
+                        Build number: ${BUILD_NUMBER}. No action required."""
+               }
+
+
+               always {
+                   echo 'Pipeline finished.'
+                   junit 'backendPidev/target/surefire-reports/*.xml'
+
+               }
+               failure {
+                               mail to: "${env.EMAIL_RECIPIENT}",
+                        subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
+                        body: """Pipeline Jenkins
+                        Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                        Please check the logs and take necessary actions."""
+
+                   echo 'Pipeline failed. Please check the logs for details.'
+               }
+           }
+
 }
