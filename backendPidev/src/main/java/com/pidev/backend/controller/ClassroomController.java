@@ -1,19 +1,20 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Classroom;
-import com.pidev.backend.service.ClassroomService;
+import com.pidev.backend.Entity.Classroom;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Service.ClassroomService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200", exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*", exposedHeaders="Access-Control-Allow-Origin" )
 @RestController
 @AllArgsConstructor
 @RequestMapping("/classrooms")
 public class ClassroomController {
 
-    private final  ClassroomService classroomService ;
+    private ClassroomService classroomService ;
 
     @GetMapping
     public List<Classroom> getAllClassroom() {

@@ -25,8 +25,6 @@ export class CourseDetailsComponent implements OnInit {
 
   avRating:any ; 
 
-  recommendations : any ; 
-
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {
     this.GetCourseById();
@@ -114,7 +112,7 @@ export class CourseDetailsComponent implements OnInit {
       "avRating":this.avRating 
     };
 
-    this.http.put("http://localhost:8090/pi/courses/course-Rating/Aymen/"+ course +"/"+this.avRating , bodyData, { responseType: 'text' }).subscribe((resultData: any) => {
+    this.http.put("http://localhost:8090/pi/courses/course-Rating/65e340822ebe9815a8fb05d6/"+ course +"/"+this.avRating , bodyData, { responseType: 'text' }).subscribe((resultData: any) => {
       console.log(resultData);
       alert("course rating  added Successfully");
       this.avRating = 0;
@@ -122,21 +120,6 @@ export class CourseDetailsComponent implements OnInit {
       
 
     });
-  }
-
-  getRecommendation() {
-    const url = 'http://127.0.0.1:5000/recommend';
-    const payload = { course_name: this.course.courseName };
-
-    this.http.post<any>(url, payload).subscribe(
-      (response) => {
-        console.log(response);
-        this.recommendations = response.recommended_courses;
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
   }
 
 

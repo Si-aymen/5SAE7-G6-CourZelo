@@ -1,4 +1,4 @@
-package com.pidev.backend.entity;
+package com.pidev.backend.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,14 +41,12 @@ public class User {
                 '}';
     }
 
+    @MongoId
     private String id;
     @Indexed(unique = true)
     @Id
     private String login ;
-
     private String password;
-    @MongoId
-
     private String firstName;
     private String lastName;
     @Indexed(unique = true)

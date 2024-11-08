@@ -1,4 +1,4 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -1,7 +1,8 @@
-package com.pidev.backend.service;
+package com.pidev.backend.Service;
 
-import com.pidev.backend.entity.Reclamation;
-import com.pidev.backend.entity.ReclamtionState;
+import com.pidev.backend.Entity.Reclamation;
+import com.pidev.backend.Entity.ReclamtionState;
+import com.pidev.backend.Entity.User;
 
 import java.util.List;
 import java.util.Map;

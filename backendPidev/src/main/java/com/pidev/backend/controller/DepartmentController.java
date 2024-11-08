@@ -1,7 +1,8 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Department;
-import com.pidev.backend.service.DepartmentService;
+import com.pidev.backend.Entity.Department;
+import com.pidev.backend.Repository.DepartmentRepository;
+import com.pidev.backend.Service.DepartmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +10,11 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
 @RequestMapping("/Departments")
 public class DepartmentController {
-    private final DepartmentService departmentService;
+    private DepartmentRepository departmentRepository;
+    private DepartmentService departmentService;
 
 
     @GetMapping("/GetAllDepartments")

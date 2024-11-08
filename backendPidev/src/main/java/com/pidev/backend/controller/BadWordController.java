@@ -1,20 +1,20 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.SignalBadword;
-import com.pidev.backend.serviceImpl.SignalBadWordServImpl;
+import com.pidev.backend.Entity.SignalBadword;
+import com.pidev.backend.ServiceImpl.SignalBadWordServImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
 @RestController
 @RequestMapping("/badword")
 public class BadWordController {
-    private final SignalBadWordServImpl sbwserv;
-    public BadWordController(SignalBadWordServImpl sbwserv) {
-        this.sbwserv = sbwserv;
-    }
+    @Autowired
+    SignalBadWordServImpl sbwserv;
     @GetMapping("/get-badword")
+    @ResponseBody
     public List<SignalBadword> getBAdword() {
         return sbwserv.afficheBadword();
 

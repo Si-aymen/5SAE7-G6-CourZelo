@@ -1,13 +1,13 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Reponse;
-import com.pidev.backend.serviceImpl.ReponseServiceImpl;
+import com.pidev.backend.Entity.Reponse;
+import com.pidev.backend.ServiceImpl.ReponseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
 @RestController
 @RequestMapping("/reponse")
 public class ReponseController {

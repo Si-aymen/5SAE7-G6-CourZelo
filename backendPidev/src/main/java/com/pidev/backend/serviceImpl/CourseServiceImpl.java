@@ -1,10 +1,10 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.*;
-import com.pidev.backend.repository.ChapterRepository;
-import com.pidev.backend.repository.CourseRepository;
-import com.pidev.backend.repository.UserRepository;
-import com.pidev.backend.service.CourseService;
+import com.pidev.backend.Entity.*;
+import com.pidev.backend.Repository.ChapterRepository;
+import com.pidev.backend.Repository.CourseRepository;
+import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.Service.CourseService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,13 +127,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCourseById(String courseId) {
-        Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        if (optionalCourse.isPresent()) {
-            return optionalCourse.get();
-        } else {
-            // Handle the case where the course was not found
-            throw new EntityNotFoundException("Course with ID " + courseId + " not found");
-        }
+        return courseRepository.findById(courseId).get() ;
     }
 
     @Override

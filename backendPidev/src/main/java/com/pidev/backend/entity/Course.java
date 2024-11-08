@@ -1,5 +1,9 @@
-package com.pidev.backend.entity;
+package com.pidev.backend.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +24,8 @@ public class Course {
     @MongoId
     // details course
     private String id;
-    private int index ;
     private String courseName;
     private String courseLevel;
-    private String url ;
-    private String organization ;
-    private String platform ;
     private Speciality courseDomain;
     private Long courseDuration;
     private Date dateAdded;

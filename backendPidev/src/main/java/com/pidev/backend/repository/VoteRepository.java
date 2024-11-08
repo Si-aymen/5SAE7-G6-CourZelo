@@ -1,6 +1,6 @@
-package com.pidev.backend.repository;
+package com.pidev.backend.Repository;
 
-import com.pidev.backend.entity.Vote;
+import com.pidev.backend.Entity.Vote;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

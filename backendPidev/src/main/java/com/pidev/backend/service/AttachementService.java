@@ -1,6 +1,6 @@
-package com.pidev.backend.service;
+package com.pidev.backend.Service;
 
-import com.pidev.backend.entity.Attachment;
+import com.pidev.backend.Entity.Attachment;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +13,6 @@ public interface AttachementService {
         void deleteAttachement(String id);
         void deleteAllAttachements();
 
-        public String base64Encode(String imagePath) throws IOException;
-        public String saveImage(String base64, String extension);
+        public String base64_encode(String imagePath) throws IOException;
+        public String save_image(String base64, String extension);
 }

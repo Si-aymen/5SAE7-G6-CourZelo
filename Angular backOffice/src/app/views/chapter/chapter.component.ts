@@ -13,6 +13,7 @@ export class ChapterComponent implements OnInit {
   
 
   chapterArray: any[] = [];
+  id: String = "";
   chapterName: String = "";
   duration : number = 0 ; 
   CurrentchapterID = "";
@@ -49,6 +50,7 @@ export class ChapterComponent implements OnInit {
   }
   add() {
     let bodyData = {
+      "id" : this.id ,
       "chapterName": this.chapterName,
       "duration": this.duration
     };
@@ -57,6 +59,7 @@ export class ChapterComponent implements OnInit {
       console.log(resultData);
       alert("chapter added Successfully");
       this.GetAllchapter();
+      this.id='' ; 
       this.chapterName = '';
       this.duration = 0;
       

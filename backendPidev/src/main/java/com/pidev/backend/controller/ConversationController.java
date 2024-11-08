@@ -1,19 +1,22 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Conversation;
-import com.pidev.backend.service.ConversationService;
+import com.pidev.backend.Entity.Conversation;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Service.ConversationService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*",exposedHeaders="Access-Control-Allow-Origin" )
 @RestController
 @AllArgsConstructor
 @RequestMapping("/conversations")
 
 public class ConversationController {
 
-    private final    ConversationService conversationService;
+    @Autowired
+    ConversationService conversationService;
 
     @PostMapping("/add-conversation")
     public Conversation addConversation(@RequestBody Conversation c) {

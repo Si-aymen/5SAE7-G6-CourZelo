@@ -1,10 +1,12 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Course;
-import com.pidev.backend.entity.Speciality;
-import com.pidev.backend.service.CourseService;
+import com.pidev.backend.Entity.Course;
+import com.pidev.backend.Entity.Speciality;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Service.CourseService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200" ,exposedHeaders="Access-Control-Allow-Origin" )
+@CrossOrigin(origins = "*" ,exposedHeaders="Access-Control-Allow-Origin" )
 @RestController
 @AllArgsConstructor
 @RequestMapping("/courses")
 public class CourseController {
-    private final    CourseService courseService ;
+    @Autowired
+    CourseService courseService ;
 
     @PostMapping("/add-course")
     public Course addCourse(@RequestBody Course c) {

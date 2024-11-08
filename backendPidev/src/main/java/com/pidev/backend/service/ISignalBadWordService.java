@@ -1,6 +1,6 @@
-package com.pidev.backend.service;
+package com.pidev.backend.Service;
 
-import com.pidev.backend.entity.SignalBadword;
+import com.pidev.backend.Entity.SignalBadword;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.*;
-import com.pidev.backend.repository.ChapterRepository;
-import com.pidev.backend.repository.CourseRepository;
-import com.pidev.backend.service.ChapterService;
+import com.pidev.backend.Entity.*;
+import com.pidev.backend.Repository.ChapterRepository;
+import com.pidev.backend.Repository.CourseRepository;
+import com.pidev.backend.Service.ChapterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

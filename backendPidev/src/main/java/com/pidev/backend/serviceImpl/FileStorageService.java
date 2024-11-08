@@ -1,9 +1,9 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.FileDB;
-import com.pidev.backend.entity.Reponse;
-import com.pidev.backend.repository.FileDBRepository;
-import com.pidev.backend.repository.ReponseRepository;
+import com.pidev.backend.Entity.FileDB;
+import com.pidev.backend.Entity.Reponse;
+import com.pidev.backend.Repository.FileDBRepository;
+import com.pidev.backend.Repository.ReponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

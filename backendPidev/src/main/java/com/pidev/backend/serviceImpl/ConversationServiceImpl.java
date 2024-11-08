@@ -1,12 +1,14 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.Conversation;
-import com.pidev.backend.repository.ConversationRepository;
-import com.pidev.backend.service.ConversationService;
+import com.pidev.backend.Entity.Conversation;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.ConversationRepository;
+import com.pidev.backend.Service.ConversationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor

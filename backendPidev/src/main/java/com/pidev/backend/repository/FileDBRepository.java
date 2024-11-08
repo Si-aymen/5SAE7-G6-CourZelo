@@ -1,7 +1,7 @@
-package com.pidev.backend.repository;
+package com.pidev.backend.Repository;
 
 
-import com.pidev.backend.entity.FileDB;
+import com.pidev.backend.Entity.FileDB;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

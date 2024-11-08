@@ -1,10 +1,11 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.Attachment;
-import com.pidev.backend.entity.Reclamation;
-import com.pidev.backend.entity.ReclamtionState;
-import com.pidev.backend.repository.ReclamationRepository;
-import com.pidev.backend.service.ReclamationService;
+import com.pidev.backend.Entity.Attachment;
+import com.pidev.backend.Entity.Reclamation;
+import com.pidev.backend.Entity.ReclamtionState;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.ReclamationRepository;
+import com.pidev.backend.Service.ReclamationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,16 +87,20 @@ public class ReclamationServiceImpl implements ReclamationService {
     }
 
     private int calculatePriority(Reclamation reclamation) {
+        // Constantes pour ajuster l'algorithme
         int basePriority = 50;
         double weightResolutionTime = 0.2;
         double weightUserImpact = 0.8;
 
+        // Récupérer les données nécessaires
         int resolutionTimeInHours = calculateResolutionTimeInHours(reclamation);
         int userImpact = reclamation.getUserImpact();
 
+        // Calculer la nouvelle priorité
         int newPriority = basePriority + (int) (weightResolutionTime * resolutionTimeInHours + weightUserImpact * userImpact);
 
-        return Math.min(Math.max(newPriority, 0), 1000);
+        // Limiter la priorité à une plage spécifique si nécessaire
+        return Math.min(Math.max(newPriority, 0), 100);
     }
 
     private int calculateResolutionTimeInHours(Reclamation reclamation) {

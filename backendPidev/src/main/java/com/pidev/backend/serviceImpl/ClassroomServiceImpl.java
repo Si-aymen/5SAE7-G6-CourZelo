@@ -1,32 +1,37 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.Classroom;
-import com.pidev.backend.entity.Course;
-import com.pidev.backend.entity.Role;
-import com.pidev.backend.entity.User;
-import com.pidev.backend.repository.ClassroomRepository;
-import com.pidev.backend.repository.CourseRepository;
-import com.pidev.backend.repository.UserRepository;
-import com.pidev.backend.service.ClassroomService;
+import com.pidev.backend.Entity.Classroom;
+import com.pidev.backend.Entity.Course;
+import com.pidev.backend.Entity.Role;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.ClassroomRepository;
+import com.pidev.backend.Repository.CourseRepository;
+import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.Service.ClassroomService;
+import com.pidev.backend.Service.UserService;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class ClassroomServiceImpl implements ClassroomService {
 
-    private  EmailSenderService senderService;
-    private final ClassroomRepository classroomRepository ;
-    private final UserRepository userRepository ;
-    private final CourseRepository courseRepository ;
+    @Autowired
+    private EmailSenderService senderService;
 
 
-
-
+    ClassroomRepository classroomRepository ;
+    UserRepository userRepository ;
+    CourseRepository courseRepository ;
     @Override
     public List<Classroom> GetAllClassrooms() {
         return classroomRepository.findAll() ;     }
@@ -38,6 +43,8 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     @Override
     public Classroom AddClassroom(Classroom classroom) {
+
+
         senderService.sendSimpleEmail("rahali.aymen2001@gmail.com",
                 "Courzello Classrooms ",
                 "A new Classroom was added \n" +

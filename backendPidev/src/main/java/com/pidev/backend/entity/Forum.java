@@ -1,4 +1,4 @@
-package com.pidev.backend.entity;
+package com.pidev.backend.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

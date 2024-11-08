@@ -1,7 +1,9 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.Attachment;
-import com.pidev.backend.service.AttachementService;
+
+import com.pidev.backend.Entity.Attachment;
+import com.pidev.backend.Service.AttachementService;
+import com.pidev.backend.Service.ReclamationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,37 +13,31 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/attachements")
 public class AttachementController {
-    private final AttachementService atachementService;
-
+    private AttachementService attachement_service;
+    private ReclamationService reclamation_service;
     @GetMapping("/get_all")
     public List<Attachment> getAllAttachements() {
-        return atachementService.getAllAttachements();
+        return attachement_service.getAllAttachements();
     }
-
     @GetMapping("/get/{id}")
     public Attachment getAttachementById(@PathVariable String id) {
-
-        return atachementService.getAttachementById(id);
+        return attachement_service.getAttachementById(id);
     }
-
     @PostMapping("/post")
     public Attachment createAttachement(@RequestBody Attachment attachment) {
-        return atachementService.createAttachement(attachment);
+        return attachement_service.createAttachement(attachment);
     }
-
     @PutMapping("/put")
     public Attachment updateAttachement(@RequestBody Attachment attachment) {
-        return atachementService.updateAttachement(attachment);
+        return attachement_service.updateAttachement(attachment);
     }
-
     @DeleteMapping("/delete/{id}")
     public void deleteAttachement(@PathVariable String id) {
-        atachementService.deleteAttachement(id);
+        attachement_service.deleteAttachement(id);
     }
-
     @DeleteMapping("/delete_all")
     public void deleteAllAttachement() {
-        atachementService.deleteAllAttachements();
+        attachement_service.deleteAllAttachements();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.pidev.backend.entity;
+package com.pidev.backend.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -1,10 +1,9 @@
-package com.pidev.backend.controller;
+package com.pidev.backend.Controller;
 
-import com.pidev.backend.entity.FileDB;
+import com.pidev.backend.Entity.FileDB;
+import com.pidev.backend.Repository.ReponseRepository;
+import com.pidev.backend.ServiceImpl.FileStorageService;
 import com.pidev.backend.message.ResponseFile;
-import com.pidev.backend.repository.ReponseRepository;
-import com.pidev.backend.serviceImpl.FileStorageService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,10 +21,10 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:4200/",exposedHeaders="Access-Control-Allow-Origin" )
 @Slf4j
 @RestController
-@AllArgsConstructor
 @RequestMapping("/File")
 public class FileController {
-  private final FileStorageService storageService;
+  @Autowired
+  private FileStorageService storageService;
   @Autowired
   ReponseRepository reprepo;
 //ajout liste file

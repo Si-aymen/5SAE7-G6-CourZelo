@@ -1,12 +1,12 @@
-package com.pidev.backend.serviceImpl;
+package com.pidev.backend.ServiceImpl;
 
-import com.pidev.backend.entity.Question;
-import com.pidev.backend.entity.Reponse;
-import com.pidev.backend.entity.User;
-import com.pidev.backend.repository.QuestionRepository;
-import com.pidev.backend.repository.ReponseRepository;
-import com.pidev.backend.repository.UserRepository;
-import com.pidev.backend.service.IReponseService;
+import com.pidev.backend.Entity.Question;
+import com.pidev.backend.Entity.Reponse;
+import com.pidev.backend.Entity.User;
+import com.pidev.backend.Repository.QuestionRepository;
+import com.pidev.backend.Repository.ReponseRepository;
+import com.pidev.backend.Repository.UserRepository;
+import com.pidev.backend.Service.IReponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
