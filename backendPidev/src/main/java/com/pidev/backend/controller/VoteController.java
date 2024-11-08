@@ -13,12 +13,7 @@ public class VoteController {
     @Autowired
     VoteServiceImpl voteserv;
 
-    @PostMapping("/add-delete-vote/{id-use}/{id-question}")
-    @ResponseBody
-    public Vote ajoutdeletevote(@RequestBody Vote p, @PathVariable("id-question") String idq, @PathVariable("id-use") String idu) {
-         return voteserv.ajoutdeletevote(p,idu,idq);
 
-    }
     @GetMapping("/nbr-vote/{id-question}")
     @ResponseBody
     public int ajoutdeletevote( @PathVariable("id-question") String idq) {
