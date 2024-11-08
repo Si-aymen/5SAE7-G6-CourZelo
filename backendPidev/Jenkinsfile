@@ -96,9 +96,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
-                  //  sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
-                     cleanWs() 
-                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.scanner.forceAnalysis=true"
+                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
+                 //    cleanWs() 
+                 //   sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.scanner.forceAnalysis=true"
 
                 }
             }
