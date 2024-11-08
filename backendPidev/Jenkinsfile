@@ -1,11 +1,9 @@
 pipeline {
     agent any
 
-     environment {
-            EMAIL_RECIPIENT = 'rezigui.alaa@gmail.com'
-
-
-        }
+    environment {
+        EMAIL_RECIPIENT = 'rezigui.alaa@gmail.com'
+    }
 
     stages {
         stage('Checkout') {
@@ -27,43 +25,38 @@ pipeline {
             }
         }
 
-         stage('Test') {
-                    steps {
-                        dir('backendPidev') {
-                            script {
-                                try {
-                                    sh 'mvn test'
-                                } catch (Exception e) {
-                                    error "Tests failed: ${e}"
-                                }
-                            }
+        stage('Test') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn test'
+                        } catch (Exception e) {
+                            error "Tests failed: ${e}"
                         }
                     }
-                }
-        
-        stage('SonarQube Analysis') {
-    steps {
-        dir('backendPidev') {
-            sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true'
-        }
-    }
-}
-
-
-
-
-
- stage('Build Docker Image') {
-            steps {
-                script {
-                    echo 'Building Docker Image'
-                    sh 'docker build -t seif2066/devops-integration:latest --build-arg JAR_FILE=target/devops-integration.jar  -f backendPidev/Dockerfile backendPidev'
                 }
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                dir('backendPidev') {
+                    sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Seif2066-2066 -Dmaven.test.skip=true'
+                }
+            }
+        }
 
-stage('Run Docker Compose') {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker Image'
+                    sh 'docker build -t seif2066/devops-integration:latest --build-arg JAR_FILE=target/devops-integration.jar -f backendPidev/Dockerfile backendPidev'
+                }
+            }
+        }
+
+        stage('Run Docker Compose') {
             steps {
                 dir('backendPidev') {
                     script {
@@ -77,48 +70,40 @@ stage('Run Docker Compose') {
             }
         }
 
-         stage('Deploy to Nexus') {
-                     steps {
-                         dir('backendPidev') {
-                             script {
-                                 try {
-                                     sh 'mvn deploy -s ~/.m2/settings.xml -X'
-                                 } catch (Exception e) {
-                                     error "Deployment failed: ${e}"
-                                 }
-                             }
-                         }
-                     }
-                 }
-
+        stage('Deploy to Nexus') {
+            steps {
+                dir('backendPidev') {
+                    script {
+                        try {
+                            sh 'mvn deploy -s ~/.m2/settings.xml -X'
+                        } catch (Exception e) {
+                            error "Deployment failed: ${e}"
+                        }
+                    }
+                }
+            }
+        }
     }
+
     post {
         always {
             echo 'Pipeline finished.'
+            junit 'backendPidev/target/surefire-reports/*.xml'
         }
-       success {
-                   mail to: "${env.EMAIL_RECIPIENT}",
-                        subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
-                        body: """Pipeline Jenkins
-                        Final Report: The pipeline has completed successfully.
-                        Build number: ${BUILD_NUMBER}. No action required."""
-               }
-
-
-               always {
-                   echo 'Pipeline finished.'
-                   junit 'backendPidev/target/surefire-reports/*.xml'
-
-               }
-               failure {
-                               mail to: "${env.EMAIL_RECIPIENT}",
-                        subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
-                        body: """Pipeline Jenkins
-                        Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
-                        Please check the logs and take necessary actions."""
-
-                   echo 'Pipeline failed. Please check the logs for details.'
-               }
-
-}
+        success {
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has completed successfully.
+                 Build number: ${BUILD_NUMBER}. No action required."""
+        }
+        failure {
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                 Please check the logs and take necessary actions."""
+            echo 'Pipeline failed. Please check the logs for details.'
+        }
+    }
 }
