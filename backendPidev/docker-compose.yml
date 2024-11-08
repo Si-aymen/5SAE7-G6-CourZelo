@@ -1,30 +1,27 @@
-version: '3.8'
-
+version: '3'
 services:
-  backend-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/courzello
-      SPRING_MAIL_USERNAME: rezigui.alaa@gmail.com
-      SPRING_MAIL_PASSWORD: npfomqcczwdlnpxt
-    ports:
-      - "8090:8090"
-    depends_on:
-      - mongo
-    networks:
-      - app-network
-
-  mongo:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_DATABASE: courzello
+  mongo-db:
+    image: mongo:4.4
+    container_name: docker-compose-mongo-db
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
     networks:
-      - app-network
+      - my-network
+
+  spring-boot-app:
+    image: omnia462/courzello
+    container_name: docker-compose-spring-boot
+    ports:
+      - "8088:8090"
+    depends_on:
+      - mongo-db
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://root:root@docker-compose-mongo-db:27017/courzello?authSource=admin
+    networks:
+      - my-network
 
 networks:
-  app-network:
-    driver: bridge
+  my-network:
