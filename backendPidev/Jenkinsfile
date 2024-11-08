@@ -58,7 +58,7 @@ pipeline {
         stage('JUnit/Mockito') {
     steps {
         script {
-            Dir("backendPidev") {
+            dir("backendPidev") {
             // Utilisation de Maven installé globalement
         //    sh './mvnw clean install -DskipTests'
             sh './mvnw test'
