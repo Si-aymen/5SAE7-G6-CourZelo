@@ -1,6 +1,5 @@
 package com.pidev.backend.controller;
 
-import com.pidev.backend.entity.Vote;
 
 import com.pidev.backend.serviceImpl.VoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
