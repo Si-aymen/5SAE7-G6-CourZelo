@@ -4,7 +4,8 @@ import com.pidev.backend.Entity.Classroom;
 import com.pidev.backend.Entity.Role;
 
 import com.pidev.backend.Entity.Speciality;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Repository;
 import com.pidev.backend.Entity.User;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     User getUserByLoginAndRole(String login , Role role ) ;
     User deleteUserByLogin(String login);
