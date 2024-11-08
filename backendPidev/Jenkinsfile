@@ -119,15 +119,6 @@ success {
                  Final Report: The pipeline has completed successfully.
                  Build number: ${BUILD_NUMBER}. No action required."""
         }
-        failure {
-            mail to: "${env.EMAIL_RECIPIENT}",
-                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
-                 body: """Pipeline Jenkins
-                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
-                 Please check the logs and take necessary actions."""
-        }
-
-
 
         
         always {
@@ -136,6 +127,12 @@ success {
 
         }
         failure {
+                        mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                 Please check the logs and take necessary actions."""
+
             echo 'Pipeline failed. Please check the logs for details.'
         }
     }
