@@ -43,26 +43,6 @@ pipeline {
 }
 
 
-         stage('Generate JaCoCo Report') {
-                    steps {
-                        echo 'Generating JaCoCo Report'
-                        dir("$BASE_DIR") {
-                            sh 'mvn jacoco:report'
-                        }
-                    }
-                }
-
-                stage('JaCoCo Coverage Report') {
-                    steps {
-                        echo 'Publishing JaCoCo Coverage Report'
-                        step([$class: 'JacocoPublisher',
-                              execPattern: '**/target/jacoco.exec',
-                              classPattern: '**/target/classes/**/*.class',
-                              sourcePattern: '**/src/main/java/**/*.java',
-                              exclusionPattern: '**/target/**,**/*Test*,**/_javassist/**'
-                        ])
-                    }
-                }
 
 
 
