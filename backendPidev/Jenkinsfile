@@ -14,7 +14,7 @@ pipeline {
         }
         stage('GIT') {
             steps {
-                git branch: 'AlaaRezigui-5SAE7-G6',
+                git branch: 'nourchaine-test',
                     url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
         }
@@ -33,7 +33,7 @@ pipeline {
             }
         }
     
-        stage('Test') {
+       /* stage('Test') {
             steps {
                 dir('backendPidev') {
                     script {
@@ -45,8 +45,8 @@ pipeline {
                     }
                 }
             }
-        }
-        stage('Generate Report') {
+        } */
+     /*   stage('Generate Report') {
             steps {
                 dir('backendPidev') {
                     script {
@@ -95,14 +95,15 @@ pipeline {
                     }
                 }
             }
-        }
+        }  */
 
         stage('Run Docker Compose') {
             steps {
                 dir('backendPidev') {
                     script {
                         try {
-                            sh 'docker-compose up -d'
+                            sh 'docker-compose down'
+                            sh 'docker-compose up --build -d '
                         } catch (Exception e) {
                             error "Docker Compose up failed: ${e}"
                         }
