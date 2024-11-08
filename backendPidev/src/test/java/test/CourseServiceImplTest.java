@@ -1,11 +1,10 @@
-package test;
+package test/java/test;
 
 import com.pidev.backend.Controller.CourseController;
 import com.pidev.backend.Entity.Course;
 import com.pidev.backend.Service.CourseService;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
