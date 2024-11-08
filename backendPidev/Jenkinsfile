@@ -12,7 +12,7 @@ pipeline {
         NEXUS_CREDENTIALS = credentials('nexus_cred')
         NEXUS_REPOSITORY = "maven-nexus-repo"
     }
-
+stages {
     stage('Checkout') {
             steps {
                 // Configurer le buffer HTTP de Git avant le clonage
@@ -187,4 +187,4 @@ pipeline {
                  body: "Le build a échoué pour ${env.JOB_NAME} - ${env.BUILD_NUMBER}. Consultez les détails ici : ${env.BUILD_URL}"
         }
         }
-    
+}
