@@ -14,21 +14,20 @@ pipeline {
     }
 
     stages {
-         stage('Checkout') {
-         steps {
-                retry(3) { // Retry up to 3 times in case of failure
-                    checkout([$class: 'GitSCM',
-                              branches: [[name: 'refs/heads/nourchainesahli-5SAE7-G6']],
-                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git']],
-                              extensions: [
-                                  [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
-                                  [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
-                              ]
-                    ])
-                }
+        stage('Checkout') {
+            steps {
+                // Clonage du dépôt Git depuis la branche nourchaine
+                git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
-         }
-            
+        }
+
+        stage('Build') {
+            steps {
+                // Exécution de la construction Maven
+                sh 'mvn -f backendPidev/pom.xml clean install'
+            }
+        }
+        
             
      //   git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
         
@@ -49,12 +48,7 @@ pipeline {
             }
         }*/
 
-        stage('Build') {
-            steps {
-                // Exécution de la construction Maven
-                sh 'mvn -f backendPidev/pom.xml clean install'
-            }
-        }
+     
 
         stage('Test') {
             /* steps {
