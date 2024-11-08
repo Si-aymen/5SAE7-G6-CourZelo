@@ -113,29 +113,17 @@ pipeline {
         }
 
     }
-    post {
-success {
-            mail to: "${env.EMAIL_RECIPIENT}",
-                 subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
-                 body: """Pipeline Jenkins
-                 Final Report: The pipeline has completed successfully.
-                 Build number: ${BUILD_NUMBER}. No action required."""
-        }
-
-        
-        always {
-            echo 'Pipeline finished.'
-            junit 'backendPidev/target/surefire-reports/*.xml'
-
+  post {
+        success {
+            mail to: 'nourchaine.sahli@gmail.com',
+                 subject: "Succès du build: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                 body: "Le build a réussi pour ${env.JOB_NAME} - ${env.BUILD_NUMBER}. Consultez les détails ici : ${env.BUILD_URL}"
+            echo "Pipeline completed successfully Sending Email ." 
         }
         failure {
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
-                 body: """Pipeline Jenkins
-                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
-                 Please check the logs and take necessary actions."""
-
-            echo 'Pipeline failed. Please check the logs for details.'
+            mail to: 'nourchaine.sahli@gmail.com',
+                 subject: "Échec du build: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                 body: "Le build a échoué pour ${env.JOB_NAME} - ${env.BUILD_NUMBER}. Consultez les détails ici : ${env.BUILD_URL}"
         }
-    }
+        }
 }
