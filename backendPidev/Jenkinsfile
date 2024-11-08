@@ -15,16 +15,24 @@ pipeline {
 
     stages {
          
-        stage('Checkout') {
-            steps {
-       
-                
-                checkout scm
+         steps {
+                retry(3) { // Retry up to 3 times in case of failure
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: 'refs/heads/nourchainesahli-5SAE7-G6']],
+                              userRemoteConfigs: [[url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git']],
+                              extensions: [
+                                  [$class: 'CheckoutOption', timeout: 60], // Increased timeout to 60 minutes
+                                  [$class: 'CloneOption', depth: 1, shallow: true] // Shallow clone with depth of 1
+                              ]
+                    ])
+                }
+            }
+            
             
      //   git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
-            }
-        }
-         stage('GIT') {
+        
+        
+      /*   stage('GIT') {
             steps {
                          // Configurer le buffer HTTP de Git avant le clonage
                 sh 'git config --global http.postBuffer 1048576000'
@@ -38,7 +46,7 @@ pipeline {
                 git branch: 'nourchainesahli-5SAE7-G6',
                     url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
-        }
+        }*/
 
         stage('Build') {
             steps {
