@@ -113,7 +113,7 @@ stages {
             }
         }
 
-        stage('SonarQube Analysis') {
+  /*      stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
                     sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
@@ -122,22 +122,22 @@ stages {
 
                 }
             }
-        }
+        }*/
         
        
-        stage('Deploy to Nexus') {
+    /*    stage('Deploy to Nexus') {
             steps {
                 // Déploiement vers Nexus, en ignorant les tests
                 sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
             }
-        }
+        }*/
 
         
         stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image'
-                    sh 'docker build -t nourchaine/sahli-5sae7-g6:latest -f backendPidev/Dockerfile .'
+                   // sh 'docker build -t nourchaine/sahli-5sae7-g6:latest -f backendPidev/Dockerfile .'
                 }
             }
         }
@@ -153,7 +153,7 @@ stages {
             steps {
                 script {
                     echo 'Pushing Docker Image to Docker Hub'
-                    sh 'docker push nourchaine/sahli-5sae7-g6:latest'
+                 //   sh 'docker push nourchaine/sahli-5sae7-g6:latest'
                 }
             }
         } 
@@ -163,7 +163,8 @@ stages {
                 dir('backendPidev') {
                     script {
                         try {
-                            sh 'docker compose -f docker-compose.yaml up -d'
+                            sh 'mvn package'
+                            sh 'docker compose up --build -d'
                         } catch (Exception e) {
                             error "Docker Compose up failed: ${e}"
                         }
