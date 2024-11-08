@@ -26,7 +26,7 @@ pipeline {
         sh 'git config --global core.compression 9'
         sh 'git config --global http.lowSpeedLimit 1024'
         sh 'git config --global http.lowSpeedTime 60'
-        git branch: 'nourchaine', url: 'https://github.com/Si-aymen/Courzelo-Devops.git'
+        git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
         }
 
