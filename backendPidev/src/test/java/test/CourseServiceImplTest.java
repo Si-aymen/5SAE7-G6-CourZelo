@@ -1,4 +1,4 @@
-package test/java/test;
+package test;
 
 import com.pidev.backend.Controller.CourseController;
 import com.pidev.backend.Entity.Course;
