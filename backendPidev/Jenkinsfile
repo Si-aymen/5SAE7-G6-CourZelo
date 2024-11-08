@@ -102,6 +102,7 @@ pipeline {
                 dir('backendPidev') {
                     script {
                         try {
+                            sh 'mvn package'
                             sh 'docker compose down'
                             sh 'docker compose up --build -d '
                         } catch (Exception e) {
