@@ -28,7 +28,7 @@ stages {
             }
         }
 
-        stage('Build') {
+         stage('Build') {
             steps {
                 // Exécution de la construction Maven
                 sh 'mvn -f backendPidev/pom.xml clean install'
@@ -57,80 +57,7 @@ stages {
 
      
 
-        stage('Test') {
-            /* steps {
-                // Exécution des tests Maven
-                sh 'mvn -f backendPidev/pom.xml test'
-            } */ 
-            steps {
-                dir('backendPidev') {
-                    script {
-                        try {
-                            sh 'mvn test'
-                        } catch (Exception e) {
-                            error "Tests failed: ${e}"
-                        }
-                    }
-                }
-            }
-        }
-        
-        stage('JUnit/Mockito') {
-    steps {
-        script {
-            dir("backendPidev") {
-            // Utilisation de Maven installé globalement
-        //    sh './mvnw clean install -DskipTests'
-                sh 'chmod +x ./mvnw'
-            sh './mvnw test'
-            junit '**/target/surefire-reports/*.xml'
-        }
-        }
-    }
-}
-
-        
-         stage('Generate Report') {
-            steps {
-                dir('backendPidev') {
-                    script {
-                        sh 'mvn surefire-report:report'
-                    }
-                }
-            }
-        }
-         stage('JaCoCo Report') {
-            steps {
-                script {
-                    // Assurez-vous que les fichiers de couverture JaCoCo existent
-                    echo "Generating JaCoCo report..."
-                    jacoco(
-                        execPattern: '**/target/jacoco.exec', // Chemin du fichier de couverture JaCoCo
-                        classPattern: '**/target/classes', // Chemin des classes compilées
-                        sourcePattern: '**/src/main/java' // Chemin du code source
-                    )
-                }
-            }
-        }
-
-  /*      stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('admin') { //  serveur SonarQube  configuré dans Jenkins
-                    sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN"
-                 //    cleanWs() 
-                 //   sh "mvn -f backendPidev/pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.scanner.forceAnalysis=true"
-
-                }
-            }
-        }*/
-        
-       
-    /*    stage('Deploy to Nexus') {
-            steps {
-                // Déploiement vers Nexus, en ignorant les tests
-                sh 'mvn -f backendPidev/pom.xml deploy -DskipTests'
-            }
-        }*/
+    
 
         
         stage('Build Docker Image') {
@@ -164,6 +91,7 @@ stages {
                     script {
                         try {
                             sh 'mvn package'
+                            sh 'docker compose down'
                             sh 'docker compose up --build -d'
                         } catch (Exception e) {
                             error "Docker Compose up failed: ${e}"
