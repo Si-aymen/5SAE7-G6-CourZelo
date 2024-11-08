@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReclamationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.serviceImpl</a> &gt; <span class="el_source">ReclamationServiceImpl.java</span></div><h1>ReclamationServiceImpl.java</h1><pre class="source lang-java linenums">package com.pidev.backend.serviceImpl;
+
+import com.pidev.backend.entity.Attachment;
+import com.pidev.backend.entity.Reclamation;
+import com.pidev.backend.entity.ReclamtionState;
+import com.pidev.backend.repository.ReclamationRepository;
+import com.pidev.backend.service.ReclamationService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+<span class="nc" id="L20">@AllArgsConstructor</span>
+public class ReclamationServiceImpl implements ReclamationService {
+    @Autowired
+    private ReclamationRepository reclamationRepository;
+    private ReclamationRepository att_repo;
+    @Override
+    public List&lt;Reclamation&gt; getAllReclamations() {
+<span class="nc" id="L27">        return reclamationRepository.findAll();</span>
+    }
+
+    @Override
+    public Reclamation getReclamationById(String id) {
+<span class="nc" id="L32">        Optional&lt;Reclamation&gt; optionalReclamation = reclamationRepository.findById(id);</span>
+<span class="nc" id="L33">        return optionalReclamation.orElse(new Reclamation());</span>
+    }
+
+    @Override
+    public void deleteReclamation(String id) {
+<span class="nc" id="L38">        reclamationRepository.deleteById(id);</span>
+<span class="nc" id="L39">    }</span>
+
+    @Override
+    public Reclamation updateReclamation(Reclamation reclamation) {
+<span class="nc" id="L43">        return reclamationRepository.save(reclamation);</span>
+    }
+
+    @Override
+    public Reclamation createReclamation(Reclamation reclamation) {
+<span class="nc" id="L48">        Attachment att=reclamation.getAttachment();</span>
+<span class="nc" id="L49">        return reclamationRepository.save(reclamation);</span>
+    }
+
+    @Override
+    public void deleteAllReclamations() {
+<span class="nc" id="L54">        reclamationRepository.deleteAll();</span>
+<span class="nc" id="L55">    }</span>
+
+    @Override
+    public long getTotalReclamations() {
+<span class="nc" id="L59">        return reclamationRepository.count();</span>
+    }
+
+    @Override
+    public Map&lt;ReclamtionState, Long&gt; getReclamationsByStateCount() {
+<span class="nc" id="L64">        List&lt;Reclamation&gt; reclamations = reclamationRepository.findAll();</span>
+
+<span class="nc" id="L66">        return reclamations.stream()</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                .filter(reclamation -&gt; reclamation.getState() != null)</span>
+<span class="nc" id="L68">                .collect(Collectors.groupingBy(Reclamation::getState, Collectors.counting()));</span>
+    }
+    @Override
+    public List&lt;Reclamation&gt; getReclamationsByUser(String userId) {
+<span class="nc" id="L72">        return reclamationRepository.findByUser_Id(userId);</span>
+    }
+
+
+
+    @Override
+    public void updatePriorities() {
+<span class="nc" id="L79">        List&lt;Reclamation&gt; reclamations = getAllReclamations();</span>
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for (Reclamation reclamation : reclamations) {</span>
+<span class="nc" id="L82">            int newPriority = calculatePriority(reclamation);</span>
+<span class="nc" id="L83">            reclamation.setPriority(newPriority);</span>
+<span class="nc" id="L84">            updateReclamation(reclamation);</span>
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">    }</span>
+
+    private int calculatePriority(Reclamation reclamation) {
+<span class="nc" id="L89">        int basePriority = 50;</span>
+<span class="nc" id="L90">        double weightResolutionTime = 0.2;</span>
+<span class="nc" id="L91">        double weightUserImpact = 0.8;</span>
+
+<span class="nc" id="L93">        int resolutionTimeInHours = calculateResolutionTimeInHours(reclamation);</span>
+<span class="nc" id="L94">        int userImpact = reclamation.getUserImpact();</span>
+
+<span class="nc" id="L96">        int newPriority = basePriority + (int) (weightResolutionTime * resolutionTimeInHours + weightUserImpact * userImpact);</span>
+
+<span class="nc" id="L98">        return Math.min(Math.max(newPriority, 0), 1000);</span>
+    }
+
+    private int calculateResolutionTimeInHours(Reclamation reclamation) {
+        // Exemple de logique pour calculer le délai de résolution en heures
+<span class="nc" id="L103">        LocalDateTime creationDate = reclamation.getCreationDate();</span>
+<span class="nc" id="L104">        LocalDateTime expectedResolutionDate = reclamation.getExpectedResolutionDate();</span>
+
+<span class="nc" id="L106">        long resolutionTimeInHours = ChronoUnit.HOURS.between(creationDate, expectedResolutionDate);</span>
+
+<span class="nc" id="L108">        return Math.toIntExact(resolutionTimeInHours);</span>
+    }
+
+    @Override
+    public double getAverageResolutionTime() {
+<span class="nc" id="L113">        List&lt;Reclamation&gt; reclamations = getAllReclamations();</span>
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (reclamations.isEmpty()) {</span>
+<span class="nc" id="L116">            return 0.0; // Évitez une division par zéro</span>
+        }
+
+<span class="nc" id="L119">        long totalResolutionTime = reclamations.stream()</span>
+<span class="nc" id="L120">                .mapToLong(this::calculateResolutionTimeInHours)</span>
+<span class="nc" id="L121">                .sum();</span>
+
+<span class="nc" id="L123">        return (double) totalResolutionTime / reclamations.size();</span>
+    }
+
+    @Override
+    public long getPendingReclamationsCount() {
+<span class="nc" id="L128">        return getAllReclamations().stream()</span>
+<span class="nc" id="L129">                .filter(reclamation -&gt; ReclamtionState.EN_ATTENTE.equals(reclamation.getState()))</span>
+<span class="nc" id="L130">                .count();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

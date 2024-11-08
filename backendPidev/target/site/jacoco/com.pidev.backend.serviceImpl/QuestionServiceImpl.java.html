@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuestionServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.serviceImpl</a> &gt; <span class="el_source">QuestionServiceImpl.java</span></div><h1>QuestionServiceImpl.java</h1><pre class="source lang-java linenums">package com.pidev.backend.serviceImpl;
+
+import com.pidev.backend.entity.*;
+import com.pidev.backend.repository.HashtagRepository;
+import com.pidev.backend.repository.QuestionRepository;
+import com.pidev.backend.repository.SignaBAdWordRepository;
+import com.pidev.backend.repository.UserRepository;
+import com.pidev.backend.service.IQuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+@Service
+<span class="nc" id="L15">public class QuestionServiceImpl implements IQuestionService {</span>
+    @Autowired
+    QuestionRepository questionrepo;
+    @Autowired
+    UserRepository userepo;
+
+    @Autowired
+    SignaBAdWordRepository sbwserv;
+    @Autowired
+    HAshtagServiceImpl hashserv;
+    @Autowired
+    HashtagRepository hashrepo;
+
+    @Override
+    public Question ajoutQuestion(Question q,String idu) {
+<span class="nc" id="L30">        User u =userepo.findById(idu).orElse(null);</span>
+<span class="nc bnc" id="L31" title="All 4 branches missed.">        if (u != null &amp;&amp; u.getQuestions() != null) {</span>
+<span class="nc" id="L32">            u.getQuestions().add(q);</span>
+        }
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (u != null) {</span>
+<span class="nc" id="L36">            userepo.save(u);</span>
+        }
+<span class="nc" id="L38">        q.setUser(u);</span>
+<span class="nc" id="L39">        questionrepo.save(q);</span>
+<span class="nc" id="L40">        q.setContenue(this.hashbadword(q.getContenue(),q.getId(),idu));</span>
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for(Technologie t:q.getTech()){</span>
+<span class="nc" id="L43">            Hashtag hashtag =new Hashtag();</span>
+<span class="nc" id="L44">            hashtag.setTechnologie(t);</span>
+<span class="nc" id="L45">            boolean  etat=hashserv.ajouthashtag(hashtag);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if(etat){ //Si le hashtag a été ajouté avec succès, l'ajoute à la question</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">                if(q.getHashtag()!=null){</span>
+<span class="nc" id="L48">                    q.getHashtag().add(hashtag);</span>
+                }else{
+<span class="nc" id="L50">                    List&lt;Hashtag&gt; hashtags =new ArrayList&lt;Hashtag&gt;();</span>
+<span class="nc" id="L51">                    hashtags.add(hashtag);</span>
+<span class="nc" id="L52">                    q.setHashtag(hashtags);</span>
+<span class="nc" id="L53">                }</span>
+            }else{// Si le hashtag existe déjà, le récupère et l'ajoute à la question
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                for(Hashtag h:hashrepo.findAll()){</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                    if(h.getTechnologie().equals(t)) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                        if(q.getHashtag()!=null){</span>
+<span class="nc" id="L58">                            q.getHashtag().add(h);</span>
+                        }else{
+<span class="nc" id="L60">                            List&lt;Hashtag&gt; hashtags =new ArrayList&lt;Hashtag&gt;();</span>
+<span class="nc" id="L61">                            hashtags.add(h);</span>
+<span class="nc" id="L62">                            q.setHashtag(hashtags);</span>
+                        }
+                    }
+<span class="nc" id="L65">                }</span>
+            }
+
+<span class="nc" id="L68">        }</span>
+
+<span class="nc" id="L70">        return questionrepo.save(q);</span>
+    }
+
+    public Question updateQuestion(String idq, Question q) {
+<span class="nc" id="L74">        Question qu = questionrepo.findById(idq).orElse(null);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (qu != null) {</span>
+<span class="nc" id="L76">            qu.setContenue(this.hashbadword(q.getContenue(), qu.getId(), qu.getUser().getId()));</span>
+
+            // Mise à jour des technologies si elles sont fournies
+<span class="nc bnc" id="L79" title="All 4 branches missed.">            if (q.getTech() != null &amp;&amp; !q.getTech().isEmpty()) {</span>
+<span class="nc" id="L80">                qu.setTech(q.getTech());</span>
+<span class="nc" id="L81">                qu.setHashtag(null); // Supprimer les hashtags existants car les technologies sont mises à jour</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                for (Technologie t : q.getTech()) {</span>
+<span class="nc" id="L83">                    Hashtag hashtag = new Hashtag();</span>
+<span class="nc" id="L84">                    hashtag.setTechnologie(t);</span>
+<span class="nc" id="L85">                    boolean etat = hashserv.ajouthashtag(hashtag);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                    if (etat) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                        if (qu.getHashtag() != null) {</span>
+<span class="nc" id="L88">                            qu.getHashtag().add(hashtag);</span>
+                        } else {
+<span class="nc" id="L90">                            List&lt;Hashtag&gt; hashtags = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L91">                            hashtags.add(hashtag);</span>
+<span class="nc" id="L92">                            qu.setHashtag(hashtags);</span>
+<span class="nc" id="L93">                        }</span>
+                    } else {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                        for (Hashtag h : hashrepo.findAll()) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                            if (h.getTechnologie().equals(t)) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                                if (qu.getHashtag() != null) {</span>
+<span class="nc" id="L98">                                    qu.getHashtag().add(h);</span>
+                                } else {
+<span class="nc" id="L100">                                    List&lt;Hashtag&gt; hashtags = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L101">                                    hashtags.add(h);</span>
+<span class="nc" id="L102">                                    qu.setHashtag(hashtags);</span>
+                                }
+                            }
+<span class="nc" id="L105">                        }</span>
+                    }
+<span class="nc" id="L107">                }</span>
+            }
+
+            // Sauvegarde de la question une seule fois après avoir terminé toutes les opérations de mise à jour
+<span class="nc" id="L111">            return questionrepo.save(qu);</span>
+        }
+<span class="nc" id="L113">        return qu;</span>
+    }
+
+
+    @Override
+    public void deleteQuestion(String idq) {
+<span class="nc" id="L119">        questionrepo.deleteById(idq);</span>
+<span class="nc" id="L120">    }</span>
+
+    @Override
+    public Question affichDetailQuestion(String idq) {
+<span class="nc" id="L124">        Question q= questionrepo.findById(idq).orElse(null);</span>
+<span class="nc" id="L125">        return q;</span>
+    }
+
+    @Override
+    public List&lt;Question&gt; afficherQuestions() {
+<span class="nc" id="L130">        return questionrepo.findAll();</span>
+    }
+    @Override
+    public  String hashbadword(String c, String idqr, String idu) {
+
+<span class="nc" id="L135">        List&lt;String&gt; badWords = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L136">        badWords.add(&quot;Hello&quot;);</span>
+<span class="nc" id="L137">        badWords.add(&quot;World&quot;);</span>
+<span class="nc" id="L138">        badWords.add(&quot;Java&quot;);</span>
+<span class="nc" id="L139">        badWords.add(&quot;re&quot;);</span>
+
+        // Split the paragraph into words using whitespace as the delimiter
+<span class="nc" id="L142">        String[] words = c.split(&quot;\\s+&quot;);</span>
+
+        // Iterate through the bad words list
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        for (String badWord : badWords) {</span>
+            // Iterate through each word in the paragraph
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            for (int i = 0; i &lt; words.length; i++) {</span>
+                // If the word matches the bad word, replace it with ***
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                if (words[i].equalsIgnoreCase(badWord)) {</span>
+<span class="nc" id="L150">                    this.ajouterbadword(idqr,idu,badWord);</span>
+<span class="nc" id="L151">                    words[i] = &quot;***&quot;;</span>
+                }
+            }
+<span class="nc" id="L154">        }</span>
+
+        // Reconstruit le texte modifié en rejoignant les mots du tableau avec des espaces
+<span class="nc" id="L157">        String modifiedParagraph = String.join(&quot; &quot;, words);</span>
+
+        // Retourne la version modifiée du texte avec les mots interdits remplacés par &quot;***&quot;
+<span class="nc" id="L160">        return modifiedParagraph;</span>
+    }
+
+    @Override
+    public List&lt;Question&gt; getQuestionsByContenue(String name) {
+<span class="nc" id="L165">        List&lt;Question&gt; search =new ArrayList&lt;Question&gt;();</span>
+        // TODO Auto-generated method stub
+<span class="nc" id="L167">        List&lt;Question&gt; questions=questionrepo.findAll();</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        for(Question a : questions) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            if(a.getContenue().contains(name)) {</span>
+<span class="nc" id="L170">                search.add(a);</span>
+            }
+<span class="nc" id="L172">        }</span>
+<span class="nc" id="L173">        return search;</span>
+    }
+
+    public SignalBadword ajouterbadword(String idq,String idu,String s) {
+<span class="nc" id="L177">        SignalBadword sbw=new SignalBadword();</span>
+<span class="nc" id="L178">        Question q = this.affichDetailQuestion(idq);</span>
+<span class="nc" id="L179">        User u = userepo.findById(idu).orElse(null);</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">        if(u!=null&amp;&amp;q!=null){</span>
+<span class="nc" id="L181">            sbw.setUser(u);</span>
+<span class="nc" id="L182">            sbw.setQuestion(q);</span>
+<span class="nc" id="L183">            sbw.setBadword(s);</span>
+
+        }
+<span class="nc" id="L186">        return sbwserv.save(sbw);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

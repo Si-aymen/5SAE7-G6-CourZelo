@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backendPidev</a> &gt; <a href="index.source.html" class="el_package">com.pidev.backend.serviceImpl</a> &gt; <span class="el_source">CourseServiceImpl.java</span></div><h1>CourseServiceImpl.java</h1><pre class="source lang-java linenums">package com.pidev.backend.serviceImpl;
+
+import com.pidev.backend.entity.*;
+import com.pidev.backend.repository.ChapterRepository;
+import com.pidev.backend.repository.CourseRepository;
+import com.pidev.backend.repository.UserRepository;
+import com.pidev.backend.service.CourseService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException; // Added import
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+<span class="nc" id="L25">@AllArgsConstructor</span>
+public class CourseServiceImpl implements CourseService {
+
+    @Autowired
+    private EmailSenderService senderService;
+
+    private final CourseRepository courseRepository;
+    private  final UserRepository userRepository ;
+    private final ChapterRepository chapterRepository ;
+
+    @Override
+    public Course addCourse(Course course) {
+
+<span class="nc" id="L38">        senderService.sendSimpleEmail(&quot;rahali.aymen2001@gmail.com&quot;,</span>
+                &quot;Courzello Courses &quot;,
+                &quot;A new Course was added \n&quot; +
+<span class="nc" id="L41">                        &quot;Course ID :&quot; + course.getId()+&quot;\n&quot;+</span>
+<span class="nc" id="L42">                        &quot;Course Name :&quot; + course.getCourseName()+&quot;\n&quot;+</span>
+<span class="nc" id="L43">                        &quot;Course Level :&quot; + course.getCourseLevel()+&quot;\n&quot;+</span>
+<span class="nc" id="L44">                        &quot;Course Domain :&quot; + course.getCourseDomain()+&quot;\n&quot;+</span>
+<span class="nc" id="L45">                        &quot;Course AvRating :&quot; + course.getAvRating()+&quot;\n&quot;</span>
+        );
+
+
+<span class="nc" id="L49">        return courseRepository.save(course);</span>
+    }
+
+    @Override
+    public List&lt;Course&gt; getALLCourses() {
+<span class="nc" id="L54">        return courseRepository.findAll();</span>
+    }
+
+    @Override
+    public Course modifyCourse(Course course) {
+<span class="nc" id="L59">        return courseRepository.save(course);</span>
+    }
+
+    @Override
+    public void deleteCourse(String courseId) {
+<span class="nc" id="L64">        Course c = courseRepository.findById(courseId).orElse(null); // Handling if course is not found</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (c != null) {</span>
+<span class="nc" id="L66">            courseRepository.delete(c);</span>
+        } else {
+<span class="nc" id="L68">            throw new RuntimeException(&quot;Course not found with id: &quot; + courseId);</span>
+        }
+<span class="nc" id="L70">    }</span>
+
+    @Override
+    public void uploadPdf(MultipartFile file, String courseId) {
+        try {
+            // Get the byte array from the uploaded file
+<span class="nc" id="L76">            byte[] bytes = file.getBytes();</span>
+
+            // Define the directory to save PDF files
+<span class="nc" id="L79">            String directory = &quot;C:/Users/manou/Desktop/pidev All/CoursePDF&quot;; // Update this with your directory path</span>
+
+            // Create the directory if it doesn't exist
+<span class="nc" id="L82">            Path path = Paths.get(directory);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (!Files.exists(path)) {</span>
+<span class="nc" id="L84">                Files.createDirectories(path);</span>
+            }
+
+            // Save the file with courseId as filename
+<span class="nc" id="L88">            String fileName = courseId + &quot;.pdf&quot;;</span>
+<span class="nc" id="L89">            Path filePath = Paths.get(directory, fileName);</span>
+<span class="nc" id="L90">            Files.write(filePath, bytes);</span>
+
+            // Get the course from the repository
+<span class="nc" id="L93">            Course course = courseRepository.findById(courseId).orElse(null);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (course != null) {</span>
+                // Set the pdfUrl field with the URL of the uploaded PDF file
+<span class="nc" id="L96">                String pdfUrl = &quot;/pdfs/&quot; + fileName; // Assuming &quot;/pdfs&quot; is the endpoint to access PDF files</span>
+<span class="nc" id="L97">                course.setPdfUrl(pdfUrl);</span>
+
+                // Save the course entity with the updated pdfUrl
+<span class="nc" id="L100">                courseRepository.save(course);</span>
+<span class="nc" id="L101">            } else {</span>
+<span class="nc" id="L102">                throw new RuntimeException(&quot;Course not found with id: &quot; + courseId);</span>
+            }
+<span class="nc" id="L104">        } catch (IOException e) {</span>
+            // Handle the IOException here
+<span class="nc" id="L106">            throw new RuntimeException(&quot;Failed to store the file&quot;, e);</span>
+<span class="nc" id="L107">        }</span>
+<span class="nc" id="L108">    }</span>
+
+    @Override
+    public List&lt;Course&gt; getCoursessByClassroom(String classroomId) {
+
+<span class="nc" id="L113">        List&lt;Course&gt; Courses = courseRepository.findAll();</span>
+<span class="nc" id="L114">        List&lt;Course&gt; CoursesInClassroom = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        for (Course Course : Courses) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            for (Classroom classroom : Course.getClassrooms()) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if (classroom.getId().equals(classroomId)) {</span>
+<span class="nc" id="L118">                    CoursesInClassroom.add(Course);</span>
+<span class="nc" id="L119">                    break;</span>
+                }
+<span class="nc" id="L121">            }</span>
+<span class="nc" id="L122">        }</span>
+<span class="nc" id="L123">        return CoursesInClassroom;</span>
+
+
+    }
+
+    @Override
+    public Course getCourseById(String courseId) {
+<span class="nc" id="L130">        Optional&lt;Course&gt; optionalCourse = courseRepository.findById(courseId);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (optionalCourse.isPresent()) {</span>
+<span class="nc" id="L132">            return optionalCourse.get();</span>
+        } else {
+            // Handle the case where the course was not found
+<span class="nc" id="L135">            throw new EntityNotFoundException(&quot;Course with ID &quot; + courseId + &quot; not found&quot;);</span>
+        }
+    }
+
+    @Override
+    @Transactional
+    public void courseEnroll(String idStudent, String idCourse) {
+<span class="nc" id="L142">        Optional&lt;User&gt; userOptional = userRepository.findById(idStudent);</span>
+<span class="nc" id="L143">        Optional&lt;Course&gt; courseOptional = courseRepository.findById(idCourse);</span>
+
+<span class="nc bnc" id="L145" title="All 4 branches missed.">        if (userOptional.isPresent() &amp;&amp; courseOptional.isPresent()) {</span>
+<span class="nc" id="L146">            User u = userOptional.get();</span>
+<span class="nc" id="L147">            Course c = courseOptional.get();</span>
+
+<span class="nc" id="L149">            c.getStudentEnroling().add(u);</span>
+<span class="nc" id="L150">            u.getCoursesEnrolled().add(c) ;</span>
+<span class="nc" id="L151">            userRepository.save(u);</span>
+<span class="nc" id="L152">            courseRepository.save(c) ;</span>
+<span class="nc" id="L153">        } else {</span>
+<span class="nc" id="L154">            throw new EntityNotFoundException(&quot;User or Course not found&quot;);</span>
+        }
+
+
+<span class="nc" id="L158">    }</span>
+
+    @Override
+    public  List&lt;Course&gt; getCourseByCourseDomain(Speciality speciality) {
+<span class="nc" id="L162">        return courseRepository.getCourseByCourseDomain(speciality);</span>
+    }
+
+    @Override
+    public Course addRating(String userId, String courseId, Float rating) {
+<span class="nc" id="L167">        Optional&lt;Course&gt; courseOptional = courseRepository.findById(courseId);</span>
+<span class="nc" id="L168">        Optional&lt;User&gt; userOptional = userRepository.findById(userId);</span>
+
+<span class="nc bnc" id="L170" title="All 4 branches missed.">        if (!courseOptional.isPresent() || !userOptional.isPresent()) {</span>
+            // Handle error: either the course or user doesn't exist
+<span class="nc" id="L172">            throw new EntityNotFoundException(&quot;Course or User not found&quot;);</span>
+        }
+
+<span class="nc" id="L175">        Course course = courseOptional.get();</span>
+<span class="nc" id="L176">        User user = userOptional.get();</span>
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (course.getUsersRated().contains(user)) {</span>
+<span class="nc" id="L179">            throw new IllegalStateException(&quot;User has already rated this course&quot;);</span>
+        } else {
+<span class="nc" id="L181">            course.getUsersRated().add(user); // Add the user to the list of users who rated</span>
+<span class="nc" id="L182">            List&lt;Float&gt; ratings = course.getRatingList(); // Assuming getRating() should be getRatings()</span>
+<span class="nc" id="L183">            ratings.add(rating); // Add the new rating to the list</span>
+
+            // Calculate the new average
+<span class="nc" id="L186">            double average = ratings.stream()</span>
+<span class="nc" id="L187">                    .mapToDouble(Float::doubleValue)</span>
+<span class="nc" id="L188">                    .average()</span>
+<span class="nc" id="L189">                    .orElse(0.0);</span>
+
+            // Assuming you have a method to update the average rating in Course
+<span class="nc" id="L192">            course.setAvRating((float) average);</span>
+        }
+
+        // Assuming you're persisting the updated course entity
+<span class="nc" id="L196">        return courseRepository.save(course);</span>
+    }
+
+    @Override
+    public Course AddChapterToCourse(String IDCourse, String IDChapter) {
+<span class="nc" id="L201">        Course course = courseRepository.findById(IDCourse).get();</span>
+<span class="nc" id="L202">        Chapter chapter = chapterRepository.findById(IDChapter).get();</span>
+<span class="nc" id="L203">        course.getChapters().add(chapter);</span>
+<span class="nc" id="L204">        chapter.getCourses().add(course);</span>
+<span class="nc" id="L205">        courseRepository.save(course) ;</span>
+<span class="nc" id="L206">        chapterRepository.save(chapter) ;</span>
+<span class="nc" id="L207">        return course;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
