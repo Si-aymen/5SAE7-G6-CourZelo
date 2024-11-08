@@ -1,32 +1,30 @@
 version: '3.8'
 
 services:
-  mysqldb:
-    image: mysql:8.0
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: courzello
-    ports:
-      - "3306:3306"
-    volumes:
-      - db:/var/lib/mysql
-
   backend-app:
-    depends_on:
-      - mysqldb
-    build: ./
-    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/courzello
+      SPRING_MAIL_USERNAME: rezigui.alaa@gmail.com
+      SPRING_MAIL_PASSWORD: npfomqcczwdlnpxt
     ports:
       - "8090:8090"
-    environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/courzello?createDatabaseIfNotExist=true",
-        "spring.datasource.username": "root",
-        "spring.datasource.password": "root",
-        "spring.jpa.hibernate.ddl-auto": "update"}'
-    stdin_open: true
-    tty: true
+    depends_on:
+      - mongo
+    networks:
+      - app-network
 
-volumes:
-  db:
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: courzello
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
