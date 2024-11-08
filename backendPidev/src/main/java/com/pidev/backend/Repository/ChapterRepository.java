@@ -7,7 +7,7 @@ import com.pidev.backend.Entity.Role;
 
 import com.pidev.backend.Entity.Speciality;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
@@ -16,6 +16,6 @@ import java.util.Set;
 
 
 @Repository
-public interface ChapterRepository extends MongoRepository<Chapter,String> {
+public interface ChapterRepository extends JpaRepository<Chapter,String> {
 
 }
