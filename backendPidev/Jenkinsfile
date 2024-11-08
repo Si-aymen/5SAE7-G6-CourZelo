@@ -16,6 +16,7 @@ stages {
     stage('Checkout') {
             steps {
                 retry(3) {
+                    sh 'git config --global http.version HTTP/1.1'
      sh 'git config --global http.postBuffer 4294967296' // 4 Go
     sh 'git config --global http.maxRequestBuffer 1048576000' // 1 Go
     sh 'git config --global core.compression 9'
