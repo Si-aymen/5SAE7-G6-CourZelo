@@ -7,8 +7,7 @@ services:
       dockerfile: Dockerfile
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/courzello
-      SPRING_MAIL_USERNAME: rezigui.alaa@gmail.com
-      SPRING_MAIL_PASSWORD: npfomqcczwdlnpxt
+   
     ports:
       - "8090:8090"
     depends_on:
