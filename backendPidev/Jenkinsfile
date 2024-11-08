@@ -112,19 +112,28 @@ pipeline {
 
     }
     post {
+success {
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Success - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has completed successfully.
+                 Build number: ${BUILD_NUMBER}. No action required."""
+        }
+        failure {
+            mail to: "${env.EMAIL_RECIPIENT}",
+                 subject: "Pipeline Jenkins - Failure - Build #${BUILD_NUMBER}",
+                 body: """Pipeline Jenkins
+                 Final Report: The pipeline has failed. Build number: ${BUILD_NUMBER}.
+                 Please check the logs and take necessary actions."""
+        }
+
+
+
+        
         always {
             echo 'Pipeline finished.'
             junit 'backendPidev/target/surefire-reports/*.xml'
 
-            emailext(
-                subject: "Jenkins Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                body: """<p>Build ${env.BUILD_NUMBER} finished with status: ${currentBuild.currentResult}</p>
-                         <p>Project: ${env.JOB_NAME}</p>
-                         <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>""",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: 'rezigui.alaa@gmail.com',
-                mimeType: 'text/html'
-            )
         }
         failure {
             echo 'Pipeline failed. Please check the logs for details.'
