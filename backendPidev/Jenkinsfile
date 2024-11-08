@@ -16,6 +16,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                 sh 'git config --global http.postBuffer 1048576000'
+                  sh 'git config --global http.maxRequestBuffer 524288000'
+        sh 'git config --global core.compression 9'
+        sh 'git config --global http.lowSpeedLimit 1024'
+        sh 'git config --global http.lowSpeedTime 60'
                 // Clonage du dépôt Git depuis la branche nourchaine
                 git branch: 'nourchainesahli-5SAE7-G6', url: 'https://github.com/Si-aymen/5SAE7-G6-CourZelo.git'
             }
