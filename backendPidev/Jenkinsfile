@@ -130,7 +130,7 @@ pipeline {
             steps {
                 script {
                     echo 'Pushing Docker Image to Docker Hub'
-                    sh 'docker push nourchaine/devops:latest'
+                    sh 'docker push nourchaine/sahli-5sae7-g6:latest'
                 }
             }
         } 
